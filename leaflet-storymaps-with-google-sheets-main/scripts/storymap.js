@@ -275,7 +275,7 @@ $(window).on('load', function() {
       pixelsAbove[i] = pixelsAbove[i-1] + $('div#container' + (i-1)).height() + chapterContainerMargin;
     }
     pixelsAbove.push(Number.MAX_VALUE);
-
+    
     $('div#contents').scroll(function() {
       var currentPosition = $(this).scrollTop();
 
@@ -355,11 +355,12 @@ $(window).on('load', function() {
                   }
                 }
               }
-
+              //geojsonoverlay
+              fetch("ZipCode.geojson")
               geoJsonOverlay = L.geoJson(geojson, {
                 style: function(feature) {
                   return {
-                    fillColor: feature.properties.fillColor || props.fillColor || '#ffffff',
+                    fillColor: feature.properties.fillColor || props.fillColor || 'red',
                     weight: feature.properties.weight || props.weight || 1,
                     opacity: feature.properties.opacity || props.opacity || 0.5,
                     color: feature.properties.color || props.color || '#cccccc',
