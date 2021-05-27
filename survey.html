@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Basic Leaflet Map</title>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="#">
+        <link rel="stylesheet" href="style/surveystyle.css">
+
+        <!-- Leaflet's css-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+        <!-- Leaflet's JavaScript-->
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    </head>
+    
+    <body>
+        <header>
+            Estimated Completion Time: Less than 1 minute.<!-- added this-->
+
+        </header> 
+
+        <div id="survey">
+        <!-- this is the iframe for our survey -->
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSePR9CoLOIPQNtwkU4d-6OoTt59Px4DcoRNdEgpW6ZgJ--qkw/viewform?embedded=true" width="640" height="570" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </div>
+        <div id="returnbutton">
+            <a href="index.html"> Return to Map </a> 
+        </div>
+        
+        <footer> Note: Thank you for taking the time to respond! If you would like your answer revoked,
+            please contact wduong320@g.ucla.edu with as much of your answers as you remember
+             and I'll try to remove it from the Google Sheet.
+
+             Note to self: Look into a way to strikeout Google Survey results on user request automatically.
+            
+        </footer> <!-- added this -->
+        <script src="js/init.js"></script>
+    </body>
+</html>

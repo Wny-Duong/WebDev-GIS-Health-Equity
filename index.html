@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Basic Leaflet Map</title>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="#">
+        <link rel="stylesheet" href="style/style.css">
+
+        <!-- Leaflet's css-->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+        <!-- Leaflet's JavaScript-->
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    </head>
+    
+    <body>
+        <header>
+            Favorite Games and Other Pastimes By Location<!-- added this-->
+            
+        </header> 
+        <div id ='icon'>
+            <img src="style/controller.png" alt="Controller Icon">
+        </div>
+        </div>
+        <div id="contents"></div>
+        <!-- add before the map div, or after, either way works.
+         Because we will define the layout in CSS Grid -->
+
+        <div id="map"></div>
+        
+        <div id="survey">
+        <!-- this is the iframe for our survey -->
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSePR9CoLOIPQNtwkU4d-6OoTt59Px4DcoRNdEgpW6ZgJ--qkw/viewform?embedded=true" width="640" height="570" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </div>
+
+        <div id="returnbutton">
+            <a href="survey.html"> Please Fill Out a New Response Here! </a> 
+        </div>
+
+        <footer>
+            This is some spare footer text that I kept around because screwing around too much
+            messed up my CSS.
+        </footer> <!-- added this -->
+        <script src="js/init.js"></script>
+    </body>
+</html>
