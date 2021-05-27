@@ -12,7 +12,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 */
-let url = 'https://spreadsheets.google.com/feeds/list/1fOGJWiskaoYxeZPDIHJXBnfe9X7E3MAPRrl6x0QMLHo/o1ff19g/public/values?alt=json'
+let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/null/public/values?alt=json'
 fetch(url)
 	.then(response => {
 		return response.json();
