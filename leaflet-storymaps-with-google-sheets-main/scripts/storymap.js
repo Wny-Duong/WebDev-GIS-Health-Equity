@@ -227,7 +227,7 @@ $(window).on('load', function() {
         media = $('<' + mediaType + '>', {
           src: c['Media Link'],
           controls: mediaType === 'audio' ? 'controls' : '',
-          alt: c['Chapter']
+          alt: c['Timestamp']
         });
 
         var enableLightbox = getSetting('_enableLightbox') === 'yes' ? true : false;
@@ -235,8 +235,8 @@ $(window).on('load', function() {
           var lightboxWrapper = $('<a></a>', {
             'data-lightbox': c['Media Link'],
             'href': c['Media Link'],
-            'data-title': c['Chapter'],
-            'data-alt': c['Chapter'],
+            'data-title': c['Timestamp'],
+            'data-alt': c['Timestamp'],
           });
           media = lightboxWrapper.append(media);
         }
@@ -247,10 +247,10 @@ $(window).on('load', function() {
       }
 
       container
-        .append('<p class="chapter-header">' + c['Chapter'] + '</p>')
+        .append('<p class="chapter-header">' + c['Timestamp'] + '</p>')
         .append(media ? mediaContainer : '')
         .append(media ? source : '')
-        .append('<p class="description">' + c['Description'] + '</p>');
+        .append('<p class="description">' + c['What problems have you experienced in trying to utilize food aid services above? and how can they improve?'] + '</p>');
 
       $('#contents').append(container);
 
