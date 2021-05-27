@@ -21,6 +21,22 @@ fetch(url)
         // console.log(data)
         processData(data)
     })
+// Code for Zipcode Boundaries
+    fetch("ZipCode.geojson")
+	.then(response => {
+		return response.json();
+		})
+    .then(data =>{
+        // Basic Leaflet method to add GeoJSON data
+                        // the leaflet method for adding a geojson
+            L.geoJSON(data, {
+                style: function (feature) {
+                    return {color: 'red'};
+                }
+            }).bindPopup(function (layer) {
+                return layer.feature.properties.name;
+            }).addTo(map);
+        });
 
 let areGamers = L.featureGroup();
 let notGamers = L.featureGroup();
