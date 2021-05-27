@@ -1,0 +1,55 @@
+@import url(//fonts.googleapis.com/css?family=Roboto);
+body{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 35fr 1fr; 
+    grid-template-areas: ". header ." 
+                          ". survey ."
+                          ". returnbutton ."
+                          ". footer .";
+    background-image: url(https://image.freepik.com/free-vector/vintage-ornamental-flowers-background_52683-28040.jpg);
+    background-size: 300px;
+}
+
+
+#returnbutton {
+    grid-area: returnbutton;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+#survey {
+    grid-area: survey;
+    overflow: hidden;
+    /* 16:9 aspect ratio */
+    padding-top: 0%;
+    position: relative;
+}
+
+#survey iframe {
+   border: 0;
+   height: 100%;
+   left: 0;
+   position: absolute;
+   top: 0;
+   width: 100%;
+}
+
+#contents{
+    grid-area: contentpanel;
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    
+}
+@import url(//fonts.googleapis.com/css?family=Roboto);
+header{
+    grid-area: header;
+    font-family: "Roboto",  sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+}
+footer{
+    grid-area: footer;
+    font-family: "Roboto", Bold, sans-serif;
+}

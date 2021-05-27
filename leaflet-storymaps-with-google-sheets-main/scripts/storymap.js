@@ -247,10 +247,12 @@ $(window).on('load', function() {
       }
 
       container
-        .append('<p class="chapter-header">' + c['Timestamp'] + '</p>')
-        .append(media ? mediaContainer : '')
-        .append(media ? source : '')
-        .append('<p class="description">' + c['What problems have you experienced in trying to utilize food aid services above? and how can they improve?'] + '</p>');
+        .append('<p class="chapter-header">' + c['What zip code do you currently (or most recently) live in?'] + '</p>')
+        //.append(media ? mediaContainer : '')
+        //.append(media ? source : '')
+        .append('<p class="description">' + c['Is there anything else you would like to share? '] + '</p>')
+        .append('<p class="description">' + c['What problems have you experienced in trying to utilize food aid services above? and how can they improve?'] + '</p>')
+        .append('<p class="description">' + c['Timestamp'] + '</p>');
 
       $('#contents').append(container);
 
@@ -389,6 +391,9 @@ $(window).on('load', function() {
         <a href='#top'>  \
           <i class='fa fa-chevron-up'></i></br> \
           <small>Top</small>  \
+        </a> \
+        <a href='survey.html'>  \
+          <p> Please follow the link here to submit a new testimony. <\p> \
         </a> \
       </div> \
     ");
