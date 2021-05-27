@@ -31,7 +31,7 @@ $(window).on('load', function() {
 
         $.when(
           $.getJSON(apiUrl + spreadsheetId + '/values/Options?key=' + googleApiKey),
-          $.getJSON(apiUrl + spreadsheetId + '/values/Chapters?key=' + googleApiKey),
+          $.getJSON(apiUrl + spreadsheetId + '/values/Form Responses 1?key=' + googleApiKey),
         ).then(function(options, chapters) {
           initMap(parse(options), parse(chapters))
         })
@@ -143,9 +143,9 @@ $(window).on('load', function() {
     for (i in chapters) {
       var c = chapters[i];
 
-      if ( !isNaN(parseFloat(c['Latitude'])) && !isNaN(parseFloat(c['Longitude']))) {
-        var lat = parseFloat(c['Latitude']);
-        var lon = parseFloat(c['Longitude']);
+      if ( !isNaN(parseFloat(c['lat'])) && !isNaN(parseFloat(c['lng']))) {
+        var lat = parseFloat(c['lat']);
+        var lon = parseFloat(c['lng']);
 
         chapterCount += 1;
 
@@ -171,7 +171,7 @@ $(window).on('load', function() {
         class: 'chapter-container'
       });
 
-
+      
       // Add media and credits: YouTube, audio, or image
       var media = null;
       var mediaContainer = null;
@@ -227,7 +227,7 @@ $(window).on('load', function() {
         media = $('<' + mediaType + '>', {
           src: c['Media Link'],
           controls: mediaType === 'audio' ? 'controls' : '',
-          alt: c['Timestamp']
+          alt: c['Chapter']
         });
 
         var enableLightbox = getSetting('_enableLightbox') === 'yes' ? true : false;
@@ -235,8 +235,8 @@ $(window).on('load', function() {
           var lightboxWrapper = $('<a></a>', {
             'data-lightbox': c['Media Link'],
             'href': c['Media Link'],
-            'data-title': c['Timestamp'],
-            'data-alt': c['Timestamp'],
+            'data-title': c['Chapter'],
+            'data-alt': c['Chapter'],
           });
           media = lightboxWrapper.append(media);
         }
@@ -369,9 +369,9 @@ $(window).on('load', function() {
           }
 
           // Fly to the new marker destination if latitude and longitude exist
-          if (c['Latitude'] && c['Longitude']) {
+          if (c['lat'] && c['lng']) {
             var zoom = c['Zoom'] ? c['Zoom'] : CHAPTER_ZOOM;
-            map.flyTo([c['Latitude'], c['Longitude']], zoom, {
+            map.flyTo([c['lat'], c['lng']], zoom, {
               animate: true,
               duration: 2, // default is 2 seconds
             });
