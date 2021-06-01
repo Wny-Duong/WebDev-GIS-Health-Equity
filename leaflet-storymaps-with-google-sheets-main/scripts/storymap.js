@@ -1,6 +1,10 @@
+
 $(window).on('load', function() {
   var documentSettings = {};
+  //Leaflet Control Window
+ 
 
+  
   // Some constants, such as default settings
   const CHAPTER_ZOOM = 15;
 
@@ -90,6 +94,17 @@ $(window).on('load', function() {
   }
 
   function initMap(options, chapters) {
+    //LEAFLET CONTROL WINDOW CODE
+    //<a href='survey.html'>  \
+   // <p> Please follow the link here to submit a new testimony. <\p>
+
+    var win =  L.control.window(map,{title:'Hello world!',
+    content:"<a href='survey.html'>  \
+    // <p> Please follow the link here to submit a new testimony. <\p>"})
+    .show()
+    
+    //LEAFLET CONTROL WINDOW CODE END
+
     createDocumentSettings(options);
 
     var chapterContainerMargin = 70;
@@ -356,11 +371,11 @@ $(window).on('load', function() {
                 }
               }
               //geojsonoverlay
-              fetch("ZipCode.geojson")
+              
               geoJsonOverlay = L.geoJson(geojson, {
                 style: function(feature) {
                   return {
-                    fillColor: feature.properties.fillColor || props.fillColor || 'red',
+                    fillColor: feature.properties.fillColor || props.fillColor || '#ffffff',
                     weight: feature.properties.weight || props.weight || 1,
                     opacity: feature.properties.opacity || props.opacity || 0.5,
                     color: feature.properties.color || props.color || '#cccccc',
