@@ -5,6 +5,8 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 	maxZoom: 16
 });
 
+//https://leafletjs.com/examples/geojson/ For working with geojson markers.
+
 Esri_WorldGrayCanvas.addTo(map)
 
 /*
@@ -124,6 +126,10 @@ function processData(theData){
     }
     // make the map zoom to the extent of markers
     let allLayers = L.featureGroup([areGamers,notGamers]);
+    var win =  L.control.window(map,{title:'Hello world!',
+    content:"<a href='survey.html'>  \
+    // <p> Please follow the link here to submit a new testimony. <\p>"})
+    .show()
     map.fitBounds(allLayers.getBounds());     
 
 }
