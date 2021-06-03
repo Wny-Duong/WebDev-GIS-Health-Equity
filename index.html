@@ -11,6 +11,18 @@
 
         <!-- Leaflet's JavaScript-->
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+        <!-- add scrollama -->
+        <script src="https://unpkg.com/intersection-observer"></script>
+        
+        <!-- scrollama -->
+        <script src='./js/scrollama.js'></script>
+        <!-- note: we are using a customized version of scrollama that the dev made here: 
+        https://github.com/russellgoldenberg/scrollama/issues/122 --> 
+
+          <!-- Leaflet Control Window-->
+        <script src="js/control_window.js"></script>
+        <link rel="stylesheet" href="style/control_window.css" />
     </head>
     
     <body>
@@ -18,6 +30,7 @@
             What Does West LA Have to Say About Food Insecurity?<!-- added this-->
             
         </header> 
+        
         <div id ='icon'>
             <img src="style/controller.png" alt="Controller Icon">
         </div>
@@ -27,6 +40,7 @@
          Because we will define the layout in CSS Grid -->
 
         <div id="map"></div>
+        
         
         <div id="survey">
         <!-- this is the iframe for our survey -->

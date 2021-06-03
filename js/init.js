@@ -5,6 +5,8 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 	maxZoom: 16
 });
 
+//https://leafletjs.com/examples/geojson/ For working with geojson markers.
+
 Esri_WorldGrayCanvas.addTo(map)
 
 /*
@@ -12,7 +14,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 */
-let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/null/public/values?alt=json'
+let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
 fetch(url)
 	.then(response => {
 		return response.json();
@@ -55,31 +57,31 @@ let layers = {
 }
 
 // add layer control box
-L.control.layers(null,layers, {collapsed:false}).addTo(map)
+//L.control.layers(null,layers, {collapsed:false}).addTo(map)
 
 function addMarker(data){
         // console.log(data)
         // these are the names of our fields in the google sheets:
         circleOptions.fillColor = "red"
-        areGamers.addLayer(L.circleMarker([data.lat,data.longi], circleOptions)
-        .bindPopup(`<h2>${data.whatisyourfavoritegame}</h2>`  + 
-                    `<br>${data.whatisyourage}</br>` + `<br>${data.location}</br>`))
-        createButtons(data.lat,data.longi,data.location)
+        areGamers.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
+        .bindPopup(`<h2>${data.list_services}</h2>`  + 
+                    `<br>${data.service_problems}</br>` + `<br>${data.zipcode}</br>`))
+        createButtons(data.lat,data.lng,data.zipcode)
         return data.timestamp
 }
 
-
+/*
 function addMarkerAlt(data){
     // console.log(data)
     // these are the names of our fields in the google sheets:
     circleOptions.fillColor = "green"
-    notGamers.addLayer(L.circleMarker([data.lat,data.longi], circleOptions)
+    notGamers.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
     .bindPopup(`<h2>${data.whatelsedoyoudoinyoursparetime}</h2>`  + 
                 `<br>${data.location}</br>`))
-                createButtons(data.lat,data.longi,data.location)
+                createButtons(data.lat,data.lng,data.location)
     return data.timestamp
 }
-
+*/
 function createButtons(lat,lng,title){
     const newButton = document.createElement("button"); // adds a new button
     newButton.id = "button"+title; // gives the button a unique id
@@ -114,16 +116,20 @@ function processData(theData){
 
     for (i = 0; i < formattedData.length; i++)
     {
-        if (formattedData[i].whatisyourfavoritegame == "")
+        if (formattedData[i].westlaresidence == "Yes")
         {
-            addMarkerAlt(formattedData[i]);
+            addMarker(formattedData[i]);
         }
         else{
-            addMarker(formattedData[i]);
+           
         }
     }
     // make the map zoom to the extent of markers
     let allLayers = L.featureGroup([areGamers,notGamers]);
+    var win =  L.control.window(map,{title:'Hello world!',
+    content:"<a href='survey.html'>  \
+    // <p> Please follow the link here to submit a new testimony. <\p>"})
+    .show()
     map.fitBounds(allLayers.getBounds());     
 
 }
