@@ -5,7 +5,7 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 	maxZoom: 16
 });
 
-//https://leafletjs.com/examples/geojson/ For working with geojson markers.
+//https://leafletjs.com/examples/geojson/ For help working with geojson markers.
 
 Esri_WorldGrayCanvas.addTo(map)
 
@@ -14,6 +14,11 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 */
+
+//Scrollama Declaration
+let scroller = scrollama();
+
+//Calling from Google Spreadsheets
 let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
 fetch(url)
 	.then(response => {
@@ -95,6 +100,8 @@ function createButtons(lat,lng,title){
     contentsDiv.appendChild(newButton); //this adds the button to our page.
 }
 
+
+//formatData in AA-191 sample code.
 function processData(theData){
     const formattedData = [] /* this array will eventually be populated with the contents of the spreadsheet's rows */
     const rows = theData.feed.entry // this is the weird Google Sheet API format we will be removing
@@ -126,11 +133,41 @@ function processData(theData){
     }
     // make the map zoom to the extent of markers
     let allLayers = L.featureGroup([areGamers,notGamers]);
-    var win =  L.control.window(map,{title:'Hello world!',
-    content:"<a href='survey.html'>  \
-    // <p> Please follow the link here to submit a new testimony. <\p>"})
-    .show()
-    map.fitBounds(allLayers.getBounds());     
 
+    //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
+    var win =  L.control.window(map,
+        {title:'Do you have something to say about West LA Food Insecurity?',
+        content:"<a href='survey.html'>  \
+        <p> Please follow the link here to submit a new testimony. <\p>"})
+    .show()
+    map.fitBounds(allLayers.getBounds());             
+    // setup the instance, pass callback functions
+    // use the scrollama scroller variable to set it up
+    scroller.setup({
+        step: ".step", // this is the name of the class that we are using to step into, it is called "step", not very original
+    })
+    // do something when you enter a "step":
+    .onStepEnter((response) => {
+        // you can access these objects: { element, index, direction }
+        // use the function to use element attributes of the button 
+        // it contains the lat/lng: 
+        scrollStepper(response.element.attributes)
+    })
+    .onStepExit((response) => {
+        // { element, index, direction }
+        // left this in case you want something to happen when someone
+        // steps out of a div to know what story they are on.
+    });
 }
 
+function scrollStepper(thisStep){
+    // optional: console log the step data attributes:
+    // console.log("you are in thisStep: "+thisStep)
+    let thisLat = thisStep.lat.value
+    let thisLng = thisStep.lng.value
+    // tell the map to fly to this step's lat/lng pair:
+    map.flyTo([thisLat,thisLng])
+}
+
+// setup resize event for scrollama incase someone wants to resize the page...
+window.addEventListener("resize", scroller.resize);
