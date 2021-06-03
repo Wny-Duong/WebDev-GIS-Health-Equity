@@ -1,4 +1,20 @@
-const map = L.map('map').setView([34.0709, -118.444], 5);
+const map = L.map('map', {
+    // true by default, false if you want a wild map
+    sleep: true,
+    // time(ms) for the map to fall asleep upon mouseout
+    sleepTime: 750,
+    // time(ms) until map wakes on mouseover
+    wakeTime: 750,
+    // defines whether or not the user is prompted oh how to wake map
+    sleepNote: false,
+    // allows ability to override note styling
+    sleepNoteStyle: { color: 'red' },
+    // should hovering wake the map? (clicking always will)
+    hoverToWake: true,
+    // opacity (between 0 and 1) of inactive map
+    sleepOpacity: .7
+
+}).setView([34.0709, -118.444], 5);
 
 let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
@@ -136,7 +152,7 @@ function processData(theData){
 
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
     var win =  L.control.window(map,
-        {title:'Do you have something to say about West LA Food Insecurity?',
+        {title:'Do you have something about food insecurity to share?',
         content:"<a href='survey.html'>  \
         <p> Please follow the link here to submit a new testimony. <\p>"})
     .show()
