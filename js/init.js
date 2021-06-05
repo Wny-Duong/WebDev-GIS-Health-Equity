@@ -1,4 +1,25 @@
+<<<<<<< Updated upstream
 const map = L.map('map').setView([34.0709, -118.444], 5);
+=======
+const map = L.map('map', {
+    //Map Sleep Code, Allows you to Scroll Down to Resources with Cursor being Trapped in Map
+    // true by default, false if you want a wild map
+    sleep: true,
+    // time(ms) for the map to fall asleep upon mouseout
+    sleepTime: 750,
+    // time(ms) until map wakes on mouseover
+    wakeTime: 750,
+    // defines whether or not the user is prompted oh how to wake map
+    sleepNote: false,
+    // allows ability to override note styling
+    sleepNoteStyle: { color: 'red' },
+    // should hovering wake the map? (clicking always will)
+    hoverToWake: true,
+    // opacity (between 0 and 1) of inactive map
+    sleepOpacity: .7
+
+}).setView([34.0709, -118.444], 5);
+>>>>>>> Stashed changes
 
 let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
@@ -9,11 +30,21 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 
 Esri_WorldGrayCanvas.addTo(map)
 
-/*
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-*/
+//Push Zipcode
+var selectedZipcode = [];
+
+function filterOnClick(selectedZipcode)
+{
+    //Variant of of process data with only buttons from a specific zip code here.
+    if (selectedZipcode != []){
+
+    }
+    else
+    {
+    //Display buttons containing only zip codes values.
+    }
+}
+
 
 //Scrollama Declaration
 let scroller = scrollama();
@@ -29,6 +60,7 @@ fetch(url)
         processData(data)
     })
 // Code for Zipcode Boundaries
+    /*
     fetch("ZipCode.geojson")
 	.then(response => {
 		return response.json();
@@ -44,7 +76,7 @@ fetch(url)
                 return layer.feature.properties.name;
             }).addTo(map);
         });
-
+*/
 let areGamers = L.featureGroup();
 let notGamers = L.featureGroup();
 let circleOptions = {
@@ -61,16 +93,18 @@ let layers = {
 	"Does Not Play Video Games": notGamers
 }
 
-// add layer control box
-//L.control.layers(null,layers, {collapsed:false}).addTo(map)
 
+
+//TODO: From here, find a way to get list_services and service problems into a textbox to replace buttons on the side.
 function addMarker(data){
         // console.log(data)
         // these are the names of our fields in the google sheets:
         circleOptions.fillColor = "red"
         areGamers.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
-        .bindPopup(`<h2>${data.list_services}</h2>`  + 
-                    `<br>${data.service_problems}</br>` + `<br>${data.zipcode}</br>`))
+        .bindPopup(`<h2> Services Used: ${data.listservices}</h2>`  + 
+                    `<br> Service Problems: ${data.serviceproblems}</br>` + 
+                    `<br> Other Comments: ${data.anythingelse}</br>`  +
+                    `<br>${data.zipcode}</br>`))
         createButtons(data.lat,data.lng,data.zipcode)
         return data.timestamp
 }
@@ -87,6 +121,10 @@ function addMarkerAlt(data){
     return data.timestamp
 }
 */
+
+
+
+
 function createButtons(lat,lng,title){
     const newButton = document.createElement("button"); // adds a new button
     newButton.id = "button"+title; // gives the button a unique id
@@ -123,6 +161,7 @@ function processData(theData){
 
     for (i = 0; i < formattedData.length; i++)
     {
+        //Filter for West LA Residence to Add Marker
         if (formattedData[i].westlaresidence == "Yes")
         {
             addMarker(formattedData[i]);
@@ -133,6 +172,8 @@ function processData(theData){
     }
     // make the map zoom to the extent of markers
     let allLayers = L.featureGroup([areGamers,notGamers]);
+    areGamers.addTo(map);
+    notGamers.addTo(map);
 
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
     var win =  L.control.window(map,
@@ -140,6 +181,7 @@ function processData(theData){
         content:"<a href='survey.html'>  \
         <p> Please follow the link here to submit a new testimony. <\p>"})
     .show()
+
     map.fitBounds(allLayers.getBounds());             
     // setup the instance, pass callback functions
     // use the scrollama scroller variable to set it up
@@ -171,3 +213,6 @@ function scrollStepper(thisStep){
 
 // setup resize event for scrollama incase someone wants to resize the page...
 window.addEventListener("resize", scroller.resize);
+
+// add layer control box
+L.control.layers(null,layers, {collapsed:false}).addTo(map)
