@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Basic Leaflet Map</title>
+        <title>West LA Food Empowerment</title>
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="#">
         <link rel="stylesheet" href="style/style.css">
@@ -11,6 +11,21 @@
 
         <!-- Leaflet's JavaScript-->
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+        <!-- add scrollama -->
+        <script src="https://unpkg.com/intersection-observer"></script>
+        
+        <!-- scrollama -->
+        <script src='./js/scrollama.js'></script>
+        <!-- note: we are using a customized version of scrollama that the dev made here: 
+        https://github.com/russellgoldenberg/scrollama/issues/122 --> 
+
+          <!-- Leaflet Control Window-->
+        <script src="js/control_window.js"></script>
+        <link rel="stylesheet" href="style/control_window.css" />
+
+        <!-- Map Sleep Script-->
+        <script src="js/sleep.js"></script>
     </head>
     
     <body>
@@ -18,8 +33,9 @@
             What Does West LA Have to Say About Food Insecurity?<!-- added this-->
             
         </header> 
+        
         <div id ='icon'>
-            <img src="style/controller.png" alt="Controller Icon">
+            <img src="style/food-court.png" alt="Food Icon">
         </div>
         </div>
         <div id="contents"></div>
@@ -28,13 +44,17 @@
 
         <div id="map"></div>
         
+        
         <div id="survey">
         <!-- this is the iframe for our survey -->
         <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSePR9CoLOIPQNtwkU4d-6OoTt59Px4DcoRNdEgpW6ZgJ--qkw/viewform?embedded=true" width="640" height="570" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
         </div>
 
-        <div id="returnbutton">
+        <div id="surveybutton">
             <a href="survey.html"> Please Fill Out a New Response Here! </a> 
+        </div>
+        <div id="resourcebutton">
+            <a href="resources.html"> Find Resources Here </a> 
         </div>
 
         <footer>

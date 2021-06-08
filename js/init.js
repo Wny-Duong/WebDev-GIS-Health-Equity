@@ -1,9 +1,27 @@
-const map = L.map('map').setView([34.0709, -118.444], 5);
+const map = L.map('map', {
+    // true by default, false if you want a wild map
+    sleep: true,
+    // time(ms) for the map to fall asleep upon mouseout
+    sleepTime: 750,
+    // time(ms) until map wakes on mouseover
+    wakeTime: 750,
+    // defines whether or not the user is prompted oh how to wake map
+    sleepNote: false,
+    // allows ability to override note styling
+    sleepNoteStyle: { color: 'red' },
+    // should hovering wake the map? (clicking always will)
+    hoverToWake: true,
+    // opacity (between 0 and 1) of inactive map
+    sleepOpacity: .7
+
+}).setView([34.0709, -118.444], 5);
 
 let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
 	maxZoom: 16
 });
+
+//https://leafletjs.com/examples/geojson/ For help working with geojson markers.
 
 Esri_WorldGrayCanvas.addTo(map)
 
@@ -12,7 +30,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 */
-let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/null/public/values?alt=json'
+
+//Scrollama Declaration
+let scroller = scrollama();
+
+//Calling from Google Spreadsheets
+let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
 fetch(url)
 	.then(response => {
 		return response.json();
@@ -55,31 +78,31 @@ let layers = {
 }
 
 // add layer control box
-L.control.layers(null,layers, {collapsed:false}).addTo(map)
+//L.control.layers(null,layers, {collapsed:false}).addTo(map)
 
 function addMarker(data){
         // console.log(data)
         // these are the names of our fields in the google sheets:
         circleOptions.fillColor = "red"
-        areGamers.addLayer(L.circleMarker([data.lat,data.longi], circleOptions)
-        .bindPopup(`<h2>${data.whatisyourfavoritegame}</h2>`  + 
-                    `<br>${data.whatisyourage}</br>` + `<br>${data.location}</br>`))
-        createButtons(data.lat,data.longi,data.location)
+        areGamers.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
+        .bindPopup(`<h2>${data.list_services}</h2>`  + 
+                    `<br>${data.service_problems}</br>` + `<br>${data.zipcode}</br>`))
+        createButtons(data.lat,data.lng,data.zipcode)
         return data.timestamp
 }
 
-
+/*
 function addMarkerAlt(data){
     // console.log(data)
     // these are the names of our fields in the google sheets:
     circleOptions.fillColor = "green"
-    notGamers.addLayer(L.circleMarker([data.lat,data.longi], circleOptions)
+    notGamers.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
     .bindPopup(`<h2>${data.whatelsedoyoudoinyoursparetime}</h2>`  + 
                 `<br>${data.location}</br>`))
-                createButtons(data.lat,data.longi,data.location)
+                createButtons(data.lat,data.lng,data.location)
     return data.timestamp
 }
-
+*/
 function createButtons(lat,lng,title){
     const newButton = document.createElement("button"); // adds a new button
     newButton.id = "button"+title; // gives the button a unique id
@@ -93,6 +116,8 @@ function createButtons(lat,lng,title){
     contentsDiv.appendChild(newButton); //this adds the button to our page.
 }
 
+
+//formatData in AA-191 sample code.
 function processData(theData){
     const formattedData = [] /* this array will eventually be populated with the contents of the spreadsheet's rows */
     const rows = theData.feed.entry // this is the weird Google Sheet API format we will be removing
@@ -114,17 +139,51 @@ function processData(theData){
 
     for (i = 0; i < formattedData.length; i++)
     {
-        if (formattedData[i].whatisyourfavoritegame == "")
+        if (formattedData[i].westlaresidence == "Yes")
         {
-            addMarkerAlt(formattedData[i]);
+            addMarker(formattedData[i]);
         }
         else{
-            addMarker(formattedData[i]);
+           
         }
     }
     // make the map zoom to the extent of markers
     let allLayers = L.featureGroup([areGamers,notGamers]);
-    map.fitBounds(allLayers.getBounds());     
 
+    //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
+    var win =  L.control.window(map,
+        {title:'Do you have something about food insecurity to share?',
+        content:"<a href='survey.html'>  \
+        <p> Please follow the link here to submit a new testimony. <\p>"})
+    .show()
+    map.fitBounds(allLayers.getBounds());             
+    // setup the instance, pass callback functions
+    // use the scrollama scroller variable to set it up
+    scroller.setup({
+        step: ".step", // this is the name of the class that we are using to step into, it is called "step", not very original
+    })
+    // do something when you enter a "step":
+    .onStepEnter((response) => {
+        // you can access these objects: { element, index, direction }
+        // use the function to use element attributes of the button 
+        // it contains the lat/lng: 
+        scrollStepper(response.element.attributes)
+    })
+    .onStepExit((response) => {
+        // { element, index, direction }
+        // left this in case you want something to happen when someone
+        // steps out of a div to know what story they are on.
+    });
 }
 
+function scrollStepper(thisStep){
+    // optional: console log the step data attributes:
+    // console.log("you are in thisStep: "+thisStep)
+    let thisLat = thisStep.lat.value
+    let thisLng = thisStep.lng.value
+    // tell the map to fly to this step's lat/lng pair:
+    map.flyTo([thisLat,thisLng])
+}
+
+// setup resize event for scrollama incase someone wants to resize the page...
+window.addEventListener("resize", scroller.resize);

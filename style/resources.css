@@ -1,0 +1,77 @@
+@import url(//fonts.googleapis.com/css?family=Roboto);
+body{
+    background-image: url(https://image.freepik.com/free-vector/stylish-hexagonal-line-pattern-background_1017-19742.jpg);
+    background-size: 300px;
+
+}
+
+#resources {
+    display: grid;
+    grid-template-columns: 0.1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr 1fr; 
+    grid-template-areas: "r1img r1" 
+                        "r2img r2" 
+                        "r3img r3"
+                        "r4img r4";
+    background-color: rgb(206, 203, 186);
+    opacity: 0.7;
+    margin: 0.5rem;
+    border-radius: 2px;
+    padding: 0.5rem;
+
+}
+
+#r1 {
+    grid-area: r1;
+    padding: 1.2rem;
+    
+}
+
+#r2 {
+    grid-area: r2;
+    padding: 1.2rem;
+}
+
+#r3 {
+    grid-area: r3;
+    padding: 1.2rem;
+}
+
+
+#r4 {
+    grid-area: r4;
+    padding: 1.2rem;
+}
+
+#r1img {
+    grid-area: r1img;
+}
+
+#r2img {
+    grid-area: r2img;
+}
+
+#r3img {
+    grid-area: r3img;
+}
+
+#r4img {
+    grid-area: r4img;
+}
+
+img {
+    width: 10rem;
+    margin: 1rem;;
+}
+
+header {
+    text-align: center;
+    font-family: "Roboto", Bold, sans-serif;
+    font-size: xxx-large;
+    font-weight: bold;
+    margin: 1rem;
+}
+
+
+
+
