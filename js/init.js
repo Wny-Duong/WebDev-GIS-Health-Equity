@@ -66,16 +66,13 @@ function highlightFeature(e) {
 }
 
 var geojson;
-console.log(geojson)
-
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
     console.log("Highlight")
 }
 
-function zoomToFeature(e) {
+function focusOnZipcode(e) {
     var geojson_zipcode = e.target.feature.properties.ZIPCODE;
-    map.fitBounds(e.target.getBounds());
     console.log("Feature's Zipcode: " + geojson_zipcode)
     filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
     console.log("Global Zipcode: " + filteredZipcode)
@@ -85,7 +82,7 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature
+        click: focusOnZipcode
     });
 }
 //CHLOROPLETH CODE END
@@ -124,8 +121,8 @@ fetch(url)
 
 
 
-let areGamers = L.featureGroup();
-let notGamers = L.featureGroup();
+let userStory = L.featureGroup();
+
 let circleOptions = {
     radius: 4,
     fillColor: "#ff7800",
@@ -136,8 +133,7 @@ let circleOptions = {
 }
 // define layers
 let layers = {
-	"Plays Video Games": areGamers,
-	"Does Not Play Video Games": notGamers
+	"Submitted Food Scarcity Story": userStory,
 }
 
 // add layer control box
@@ -147,7 +143,7 @@ function addMarker(data){
         // console.log(data)
         // these are the names of our fields in the google sheets:
         circleOptions.fillColor = "red"
-        areGamers.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
+        userStory.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
         .bindPopup(`<h2>${data.list_services}</h2>`  + 
                     `<br>${data.service_problems}</br>` + `<br>${data.zipcode}</br>`))
         createButtons(data.lat,data.lng, data)
@@ -194,7 +190,7 @@ function createButtons(lat,lng, data){
     
     newButton.setAttribute("lat",lat); // sets the latitude 
     newButton.setAttribute("lng",lng); // sets the longitude 
-
+    newButton.setAttribute("zipcode", data.zipcode) //sets zipcode
     newButton.setAttribute("services", data.listservices)
     newButton.setAttribute("use_reason", data.serviceusedreason)
     newButton.setAttribute("serviceproblems", data.serviceproblems)
@@ -242,6 +238,7 @@ function processData(theData){
     }
     // lets see what the data looks like when its clean!
     console.log(formattedData)
+
     // we can actually add functions here too
 
     for (i = 0; i < formattedData.length; i++)
@@ -265,7 +262,7 @@ function processData(theData){
         }
     }
     // make the map zoom to the extent of markers
-    let allLayers = L.featureGroup([areGamers,notGamers]);
+    let allLayers = L.featureGroup([userStory]);
 
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
     var win =  L.control.window(map,
@@ -292,6 +289,7 @@ function processData(theData){
         // steps out of a div to know what story they are on.
     });
 }
+
 
 function scrollStepper(thisStep){
     // optional: console log the step data attributes:
