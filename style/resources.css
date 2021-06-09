@@ -23,28 +23,30 @@ body{
 
 #r1 {
     grid-area: r1;
-    padding: 1.2rem;
+    padding: 1.4rem;
+    margin-top:1rem;
     
 }
 
 #r2 {
     grid-area: r2;
-    padding: 1.2rem;
+    padding: 1.4rem;
 }
 
 #r3 {
     grid-area: r3;
-    padding: 1.2rem;
+    padding: 1.4rem;
 }
 
 
 #r4 {
     grid-area: r4;
-    padding: 1.2rem;
+    padding: 1.4rem;
 }
 
 #r1img {
     grid-area: r1img;
+    opacity: 1.0;
 }
 
 #r2img {
@@ -59,9 +61,10 @@ body{
     grid-area: r4img;
 }
 
-img {
+div#resources img {
     width: 10rem;
-    margin: 1rem;;
+    margin: 1rem;
+    opacity: 1;
 }
 
 header {
@@ -71,6 +74,18 @@ header {
     font-weight: bold;
     margin: 1rem;
 }
+
+a {
+    font-family: "Roboto", Bold, sans-serif;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: rgb(14, 72, 119);
+}
+
+a:hover {
+    color: rgb(79, 80, 85);
+  }
 
 
 
