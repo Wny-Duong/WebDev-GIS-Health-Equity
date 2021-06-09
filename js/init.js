@@ -1,3 +1,4 @@
+//SOURCE: https://cliffcloud.github.io/Leaflet.Sleep/
 const map = L.map('map', {
     // true by default, false if you want a wild map
     sleep: true,
@@ -34,6 +35,58 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //Scrollama Declaration
 let scroller = scrollama();
 
+//PROCESS DATA CONTROL VARIABLE - Enables filtering based on a specific clicked zipcode once I figure out how to load one into it.
+var filteredZipcode = ""
+
+//Chloropleth Code START ; Controls GEOJson
+//REFERENCED CODE: https://leafletjs.com/examples/choropleth/
+function style(feature) {
+    return {
+        fillColor: 'red',
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
+function highlightFeature(e) {
+    var layer = e.target;
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+    
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront(); //Highlights whole zipcode regeion.
+    }
+}
+
+var geojson;
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    console.log("Highlight")
+}
+
+function focusOnZipcode(e) {
+    var geojson_zipcode = e.target.feature.properties.ZIPCODE;
+    console.log("Feature's Zipcode: " + geojson_zipcode)
+    filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
+    console.log("Global Zipcode: " + filteredZipcode)
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: focusOnZipcode
+    });
+}
+//CHLOROPLETH CODE END
+
 //Calling from Google Spreadsheets
 let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
 fetch(url)
@@ -52,17 +105,24 @@ fetch(url)
     .then(data =>{
         // Basic Leaflet method to add GeoJSON data
                         // the leaflet method for adding a geojson
-            L.geoJSON(data, {
-                style: function (feature) {
+           geojson = L.geoJSON(data, {
+                style: style,
+                /*
+                function (feature) {
                     return {color: 'red'};
-                }
+                }*/
+                onEachFeature:  onEachFeature
             }).bindPopup(function (layer) {
                 return layer.feature.properties.name;
             }).addTo(map);
         });
 
-let areGamers = L.featureGroup();
-let notGamers = L.featureGroup();
+
+
+
+
+let userStory = L.featureGroup();
+
 let circleOptions = {
     radius: 4,
     fillColor: "#ff7800",
@@ -73,8 +133,7 @@ let circleOptions = {
 }
 // define layers
 let layers = {
-	"Plays Video Games": areGamers,
-	"Does Not Play Video Games": notGamers
+	"Submitted Food Scarcity Story": userStory,
 }
 
 // add layer control box
@@ -84,10 +143,11 @@ function addMarker(data){
         // console.log(data)
         // these are the names of our fields in the google sheets:
         circleOptions.fillColor = "red"
-        areGamers.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
+        userStory.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
         .bindPopup(`<h2>${data.list_services}</h2>`  + 
                     `<br>${data.service_problems}</br>` + `<br>${data.zipcode}</br>`))
-        createButtons(data.lat,data.lng,data.zipcode)
+        createButtons(data.lat,data.lng, data)
+        
         return data.timestamp
 }
 
@@ -103,12 +163,55 @@ function addMarkerAlt(data){
     return data.timestamp
 }
 */
-function createButtons(lat,lng,title){
+
+
+/* OLD CREATE BUTTONS
+function createButtons(lat,lng,data){
+    var title = data.zipcode;
+    console.log(title);
     const newButton = document.createElement("button"); // adds a new button
     newButton.id = "button"+title; // gives the button a unique id
     newButton.innerHTML = title; // gives the button a title
     newButton.setAttribute("lat",lat); // sets the latitude 
     newButton.setAttribute("lng",lng); // sets the longitude 
+    newButton.addEventListener('click', function(){
+        map.flyTo([lat,lng]); //this is the flyTo from Leaflet
+    })
+    const contentsDiv = document.getElementById('contents')
+    contentsDiv.appendChild(newButton); //this adds the button to our page.
+}
+*/
+//Modified Button Includes New Testimony Elements
+
+function createButtons(lat,lng, data){
+    const newButton = document.createElement("button"); // adds a new button
+    let title = data.zipcode;
+    newButton.id = "button"+ title; // gives the button a unique id
+    
+    newButton.setAttribute("lat",lat); // sets the latitude 
+    newButton.setAttribute("lng",lng); // sets the longitude 
+    newButton.setAttribute("zipcode", data.zipcode) //sets zipcode
+    newButton.setAttribute("services", data.listservices)
+    newButton.setAttribute("use_reason", data.serviceusedreason)
+    newButton.setAttribute("serviceproblems", data.serviceproblems)
+    newButton.setAttribute("datetime", data.timestamp)
+
+    let services = newButton.getAttribute('services')
+    let use_reason = newButton.getAttribute('use_reason')
+    let serviceproblems = newButton.getAttribute('serviceproblems')
+    let datetime = newButton.getAttribute('datetime')
+    
+    let testimonyElements = 
+    `<h2> Where am I?: ${title} </h2> 
+        <div class='testimony'> 
+            <p> Services Used: ${services} </p> 
+            <p> Reasons for Use: ${use_reason} </p> 
+            <p> Problems of Service: ${serviceproblems} </p>
+            <p> Testimony Submission Time: ${datetime} </p> 
+        </div>`
+
+    newButton.innerHTML = testimonyElements; // gives the button a title
+    ///
     newButton.addEventListener('click', function(){
         map.flyTo([lat,lng]); //this is the flyTo from Leaflet
     })
@@ -135,20 +238,31 @@ function processData(theData){
     }
     // lets see what the data looks like when its clean!
     console.log(formattedData)
+
     // we can actually add functions here too
 
     for (i = 0; i < formattedData.length; i++)
     {
-        if (formattedData[i].westlaresidence == "Yes")
+        if (formattedData[i].westlaresidence == "Yes") //check for westLA residence
         {
-            addMarker(formattedData[i]);
+            //check if a specific zipcode output is desired
+            if (filteredZipcode == ""){
+                addMarker(formattedData[i]); 
+            }
+            else{
+                if (formattedData[i].zipcode == filteredZipcode) //adds buttons only if matching the filtered zipcode
+                {
+                    addMarker(formattedData[i]); 
+                }
+            }
+            
         }
         else{
            
         }
     }
     // make the map zoom to the extent of markers
-    let allLayers = L.featureGroup([areGamers,notGamers]);
+    let allLayers = L.featureGroup([userStory]);
 
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
     var win =  L.control.window(map,
@@ -175,6 +289,7 @@ function processData(theData){
         // steps out of a div to know what story they are on.
     });
 }
+
 
 function scrollStepper(thisStep){
     // optional: console log the step data attributes:
