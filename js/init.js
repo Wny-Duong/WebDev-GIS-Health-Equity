@@ -36,9 +36,6 @@ let scroller = scrollama();
 
 //PROCESS DATA CONTROL VARIABLE - Enables filtering based on a specific clicked zipcode once I figure out how to load one into it.
 var filteredZipcode = ""
-function updateFilter (zipcode) {
-    filteredZipcode =  zipcode
-}
 
 //Calling from Google Spreadsheets
 let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
@@ -106,8 +103,9 @@ function resetHighlight(e) {
 function zoomToFeature(e) {
     var geojson_zipcode = e.target.feature.properties.ZIPCODE;
     map.fitBounds(e.target.getBounds());
-    console.log(geojson_zipcode)
-    filteredZipcode = updateFilter(geojson_zipcode);
+    console.log("Feature's Zipcode: " + geojson_zipcode)
+    filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
+    console.log("Global Zipcode: " + filteredZipcode)
 }
 
 function onEachFeature(feature, layer) {
