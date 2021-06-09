@@ -34,6 +34,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //Scrollama Declaration
 let scroller = scrollama();
 
+//PROCESS DATA CONTROL VARIABLE - Enables filtering based on a specific clicked zipcode once I figure out how to load one into it.
+var filteredZipcode = ""
+function updateFilter (zipcode) {
+    filteredZipcode =  zipcode
+}
+
 //Calling from Google Spreadsheets
 let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
 fetch(url)
@@ -52,14 +58,79 @@ fetch(url)
     .then(data =>{
         // Basic Leaflet method to add GeoJSON data
                         // the leaflet method for adding a geojson
-            L.geoJSON(data, {
-                style: function (feature) {
+           geojson = L.geoJSON(data, {
+                style: style,
+                /*
+                function (feature) {
                     return {color: 'red'};
-                }
+                }*/
+                onEachFeature:  onEachFeature
             }).bindPopup(function (layer) {
                 return layer.feature.properties.name;
             }).addTo(map);
         });
+
+//Chloropleth Code
+
+
+function style(feature) {
+    return {
+        fillColor: 'red',
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+}
+
+function resetHighlight(e) {
+    layer.resetStyle(e.target);
+}
+
+function zoomToFeature(e) {
+    var geojson_zipcode = e.target.feature.properties.ZIPCODE;
+    map.fitBounds(e.target.getBounds());
+    console.log(geojson_zipcode)
+    filteredZipcode = updateFilter(geojson_zipcode);
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+
+
+/*Chloropleth Implementation
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+*/
+
+
 
 let areGamers = L.featureGroup();
 let notGamers = L.featureGroup();
@@ -160,8 +231,6 @@ function createButtons(lat,lng, data){
     contentsDiv.appendChild(newButton); //this adds the button to our page.
 }
 
-//PROCESS DATA CONTROL VARIABLE - Enables filtering based on a specific clicked zipcode once I figure out how to load one into it.
-var filteredZipcode = ""
 
 //formatData in AA-191 sample code.
 function processData(theData){
