@@ -160,6 +160,9 @@ function createButtons(lat,lng, data){
     contentsDiv.appendChild(newButton); //this adds the button to our page.
 }
 
+//PROCESS DATA CONTROL VARIABLE - Enables filtering based on a specific clicked zipcode once I figure out how to load one into it.
+var filteredZipcode = ""
+
 //formatData in AA-191 sample code.
 function processData(theData){
     const formattedData = [] /* this array will eventually be populated with the contents of the spreadsheet's rows */
@@ -182,9 +185,19 @@ function processData(theData){
 
     for (i = 0; i < formattedData.length; i++)
     {
-        if (formattedData[i].westlaresidence == "Yes")
+        if (formattedData[i].westlaresidence == "Yes") //check for westLA residence
         {
-            addMarker(formattedData[i]);
+            //check if a specific zipcode output is desired
+            if (filteredZipcode == ""){
+                addMarker(formattedData[i]); 
+            }
+            else{
+                if (formattedData[i].zipcode == filteredZipcode) //adds buttons only if matching the filtered zipcode
+                {
+                    addMarker(formattedData[i]); 
+                }
+            }
+            
         }
         else{
            
