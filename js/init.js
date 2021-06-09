@@ -38,6 +38,58 @@ let scroller = scrollama();
 //PROCESS DATA CONTROL VARIABLE - Enables filtering based on a specific clicked zipcode once I figure out how to load one into it.
 var filteredZipcode = ""
 
+//Chloropleth Code START ; Controls GEOJson
+//REFERENCED CODE: https://leafletjs.com/examples/choropleth/
+function style(feature) {
+    return {
+        fillColor: 'red',
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
+function highlightFeature(e) {
+    var layer = e.target;
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+    
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront(); //Highlights whole zipcode regeion.
+    }
+}
+
+var geojson;
+console.log(geojson)
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    console.log("Highlight")
+}
+
+function zoomToFeature(e) {
+    var geojson_zipcode = e.target.feature.properties.ZIPCODE;
+    map.fitBounds(e.target.getBounds());
+    console.log("Feature's Zipcode: " + geojson_zipcode)
+    filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
+    console.log("Global Zipcode: " + filteredZipcode)
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+//CHLOROPLETH CODE END
+
 //Calling from Google Spreadsheets
 let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
 fetch(url)
@@ -68,53 +120,7 @@ fetch(url)
             }).addTo(map);
         });
 
-//Chloropleth Code START
-//REFERENCED CODE: https://leafletjs.com/examples/choropleth/
-function style(feature) {
-    return {
-        fillColor: 'red',
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
-}
 
-function highlightFeature(e) {
-    var layer = e.target;
-    layer.setStyle({
-        weight: 5,
-        color: '#666',
-        dashArray: '',
-        fillOpacity: 0.7
-    });
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
-    }
-}
-
-//BUG: This isn't properly resetting the style.
-function resetHighlight(e) {
-    layer.resetStyle(e.target);
-}
-
-function zoomToFeature(e) {
-    var geojson_zipcode = e.target.feature.properties.ZIPCODE;
-    map.fitBounds(e.target.getBounds());
-    console.log("Feature's Zipcode: " + geojson_zipcode)
-    filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
-    console.log("Global Zipcode: " + filteredZipcode)
-}
-
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-    });
-}
-//CHLOROPLETH CODE END
 
 
 
