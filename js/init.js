@@ -1,3 +1,4 @@
+//SOURCE: https://cliffcloud.github.io/Leaflet.Sleep/
 const map = L.map('map', {
     // true by default, false if you want a wild map
     sleep: true,
@@ -67,9 +68,8 @@ fetch(url)
             }).addTo(map);
         });
 
-//Chloropleth Code
-
-
+//Chloropleth Code START
+//REFERENCED CODE: https://leafletjs.com/examples/choropleth/
 function style(feature) {
     return {
         fillColor: 'red',
@@ -83,19 +83,18 @@ function style(feature) {
 
 function highlightFeature(e) {
     var layer = e.target;
-
     layer.setStyle({
         weight: 5,
         color: '#666',
         dashArray: '',
         fillOpacity: 0.7
     });
-
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
 }
 
+//BUG: This isn't properly resetting the style.
 function resetHighlight(e) {
     layer.resetStyle(e.target);
 }
@@ -115,18 +114,7 @@ function onEachFeature(feature, layer) {
         click: zoomToFeature
     });
 }
-
-
-/*Chloropleth Implementation
-
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-    });
-}
-*/
+//CHLOROPLETH CODE END
 
 
 
