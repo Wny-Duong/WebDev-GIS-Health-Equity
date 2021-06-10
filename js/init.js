@@ -243,7 +243,7 @@ function addMarker(data){
         allPoints.push(thisPoint)
         //Old marker information
         // console.log(data)
-        // these are the names of our fields in the google sheets:
+        // these are the names of our fields in the google sheets:  
         createButtons(data.lat,data.lng, data)
         //Credit to
         return data.timestamp
@@ -372,8 +372,8 @@ function processData(theData){
     getBoundary(boundaryLayer)
     console.log('boundary')
     console.log(boundary)
-    map.fitBounds(allLayers.getBounds()); 
-
+    map.fitBounds(thePoints.getBounds()); 
+    
 
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
     var win =  L.control.window(map,
@@ -381,7 +381,7 @@ function processData(theData){
         content:"<a href='survey.html'>  \
         <p> Please follow the link here to submit a new testimony. <\p>"})
     .show()
-    map.fitBounds(allLayers.getBounds());             
+         
     // setup the instance, pass callback functions
     // use the scrollama scroller variable to set it up
     scroller.setup({
