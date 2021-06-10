@@ -45,6 +45,8 @@ From the web page hosting the web map, we also allow community members to direct
     - The Leaflet library is used to produce the interactive map displayed on the web page. The association of user stories to provided zip code is done through the use of this library as well as the visual appearance and usability of the map.
  - Github Pages
     - This web map is being hosted through Github Pages at zero financial cost to the team behind this iteration of the map.
+ - Turf.js
+   - This library is used for geospatial analytics. In this case, it's used for GeoJSON layer interactivity alongside Leaflet and the display of response frequency based on zip code areas.
  
 ## Source for Geojson: 
 https://hub.arcgis.com/datasets/lacounty::la-county-zip-code/explore?location=33.810100%2C-118.298800%2C9.03
@@ -60,5 +62,10 @@ The services and libraries used for this project are all free, in case there is 
 We request that all future mapping projects derived from the source code hosted here be open and visible to the public so that they can also benefit from improvements to it.
 
 # Features
-
+ - Story Display
+   - Community-submitted narratives regarding food aid services and their experiences with them are displayed on the site.
+ - Zipcode Filtering
+   - Drop-down filtering is used to allow users to specify the focus of the site on certain zip-codes and neighborhoods. Selecting a certain zipcode will display only stories associated with that zipcode.
+ - Geospatial Analytics
+   - Users of the site can see which parts of West LA get the most submitted narratives.
 # Screenshots
