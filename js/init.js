@@ -47,10 +47,16 @@ let scroller = scrollama();
 //PROCESS DATA CONTROL VARIABLE -  Global variable stores a clicked zipcode value from the GeoJSON
 //Meant to be used for filtering. 
 var filteredZipcode = ""
-
+/*
 function updateZipcode(zippy)
 {
     filteredZipcode = document.getElementById(zippy);
+    console.log(filteredZipcode)
+}
+*/
+function updateZipcode2()
+{
+    filteredZipcode = document.getElementById("zipcode_select").value;
     console.log(filteredZipcode)
 }
 
@@ -102,7 +108,8 @@ function resetHighlight(e) {
 
 
 function focusOnZipcode(e) {
-    let  geojson_zipcode = e.feature.properties.zipcode;
+    console.log(e.target.feature);
+    let  geojson_zipcode = e.target.feature.properties.zipcode
     console.log("Feature's Zipcode: " + geojson_zipcode)
     //filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
     console.log("Global Zipcode: " + filteredZipcode)
@@ -422,3 +429,7 @@ window.addEventListener("resize", scroller.resize);
 
 //cOUNT NUMBER OF OCCURRANCES OF CERTAIN ZIPCODES.
 console.log()
+
+
+//Event LIstener
+document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
