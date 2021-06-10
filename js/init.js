@@ -389,11 +389,11 @@ function processData(theData){
     
 
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
-    var win =  L.control.window(map,
+   /* var win =  L.control.window(map,
         {title:'Services People Use in this Zipcode',
         content:"<div id='container'></div> \
         <script></script>"})
-    .show()
+    .show()*/
          
     // setup the instance, pass callback functions
     // use the scrollama scroller variable to set it up
@@ -505,6 +505,13 @@ anychart.onDocumentReady(function() {
   chart.colorRange(true);
   // set the color range length
   chart.colorRange().length('80%');// display the word cloud chart
-  chart.container("container");
+  chart.container('window');
   chart.draw();
 });
+
+//Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
+var win =  L.control.window(map,
+    {title:'Services People Use in this Zipcode',
+    content:"<div id='window'></div>"})
+.show()
+
