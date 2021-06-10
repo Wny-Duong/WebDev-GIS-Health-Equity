@@ -42,13 +42,17 @@
 
     <body>
         <header>
-            What Does West LA Have to Say About Food Insecurity?<!-- added this-->
-
+            <div id="img_icon">
+                <img src="style/food-court.png" alt="Food Icon">
+            </div>
+            <div id="title">
+                <h2>What Does West LA Have to Say About Food Insecurity?</h2><!-- added this-->
+            </div>
         </header>
 
-        <div id ='icon'>
+       <!-- <div id ='icon'>
             <img src="style/food-court.png" alt="Food Icon">
-        </div>
+        </div>-->
         </div>
                 <!-- The Modal -->
                 <div id="myModal" class="modal">
@@ -79,7 +83,7 @@
         <div id="contents"></div>
         <div id = container> </div>
         <div id ="select_filter">
-            <label for="zipcode-select">Choose a zip-code:</label>
+            <label for="zipcode-select" id="label">Choose a zip-code: </label>
             <select onchange = "updateZipcode()" name="zipcodes" id="zipcode_select" >
                 <option value="">Include All</option>
                 <option value="90024">90024</option>
