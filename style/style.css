@@ -3,10 +3,10 @@ body{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr; 
     grid-template-rows: 0.1fr 1fr .1fr; 
-    grid-template-areas: "icon header selectfilter" 
-                "contentpanel  mappanel mappanel" 
-                        "surveybutton resourcebutton ."
-                    "storypanel footer .";
+    grid-template-areas: "header selectfilter selectfilter icon" 
+                "contentpanel  mappanel mappanel mappanel" 
+                        ". . . ."
+                    "storypanel footer . .";
                     background-image: url(https://image.freepik.com/free-vector/stylish-hexagonal-line-pattern-background_1017-19742.jpg);
                     background-size: 300px;
 
@@ -23,7 +23,10 @@ body{
 
 #selectfilter {
     grid-area: selectfilter;
-
+    min-height: 400px;
+    min-width: 400px;
+    margin-left: auto;
+  margin-right: auto;
 }
 #returnbutton {
     grid-area: returnbutton;

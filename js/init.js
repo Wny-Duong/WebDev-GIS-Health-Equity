@@ -56,21 +56,23 @@ let scroller = scrollama();
 //PROCESS DATA CONTROL VARIABLE -  Global variable stores a clicked zipcode value from the GeoJSON
 //Meant to be used for filtering. 
 var filteredZipcode = ""
-/*
-function updateZipcode(zippy)
+
+function updateZipcode()
 {
-    filteredZipcode = document.getElementById(zippy);
-    console.log(filteredZipcode)
-}
-*/
-function updateZipcode2()
-{
+    while (document.getElementById('contents').firstChild) {
+        document.getElementById('contents').removeChild(document.getElementById('contents').firstChild);
+    }
     filteredZipcode = document.getElementById("zipcode_select").value;
     console.log(filteredZipcode)
+    fetch(url)
+	.then(response => {
+		return response.json();
+		})
+    .then(data =>{
+        // console.log(data)
+        processData(data)
+    })
 }
-
-//
-
 //TURF.JS CODE START
 // this is the boundary layer located as a geojson in the /data/ folder 
 const boundaryLayer = "./ZipCode.geojson"
@@ -99,18 +101,6 @@ function highlightFeature(e) {
         dashArray: '',
         fillOpacity: 0.7
     });
-
-    if (filteredZipcode == layer.feature.properties.zipcode)
-    {
-        layer.setStyle({
-            weight: 5,
-            color: '#17fc7a',
-            dashArray: '',
-            fillOpacity: 0.7,
-            fillColor: 'green',
-        });
-    }
-
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront(); //Highlights whole zipcode regeion.
     }
@@ -123,16 +113,7 @@ function resetHighlight(e) {
     geojson.resetStyle(e.target);
   //  console.log("Highlight")
   var layer = e.target;
-  if (filteredZipcode == layer.feature.properties.zipcode)
-  {
-      layer.setStyle({
-          weight: 5,
-          color: '#17fc7a',
-          dashArray: '',
-          fillOpacity: 0.7,
-          fillColor: 'green',
-      });
-  }
+
 }
 
 
@@ -162,7 +143,8 @@ function onEachFeature(feature, layer) {
              weight: 5,
              color: '#17fc7a',
              dashArray: '',
-             fillOpacity: 0.7
+             fillOpacity: 0.7,
+             fillColor: 'green'
          });
      }
     layer.on({
@@ -278,6 +260,59 @@ let layers = {
 
 //addMarker enables creation of buttons on left-hand
 
+function addMarkerInit(data){
+    //Turf.JS implementation
+    let boundary_zipcode = data.zipcode
+    let services = data.listservices
+    let use_reason = data.serviceusedreason
+    let serviceproblems = data.serviceproblems
+    let datetime = data.timestamp
+    markerServicesSplit = services.split(', ');
+    console.log(markerServicesSplit);
+    markerServicesSplit.forEach(function(element){
+        if (element == "Food Banks"){
+            fb_count +=1;
+        }
+        else if (element =="Food Pantries"){
+            fp_count +=1;  
+        }
+        else if (element =="Community Fridges"){
+            cf_count+=1
+        }
+        else if (element == "SNAP (Supplemental Nutrition Assistance Program)"){
+            snap_count+=1
+        }
+        else if (element == "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)"){
+            wic_count+=1
+        }
+        else if (element == "CalFresh"){
+            calfresh_count+=1
+        }
+        else if (element =="None"){
+            none_count+=1
+        }
+    }
+    )
+    // create the turfJS point
+
+    let thisPoint = turf.point([Number(data.lng),Number(data.lat)],
+        {boundary_zipcode, 
+        services,
+        use_reason,
+        serviceproblems,
+        datetime})
+
+    // put all the turfJS points into `allPoints`
+    allPoints.push(thisPoint)
+    //Old marker information
+    // console.log(data)
+    // these are the names of our fields in the google sheets:  
+   
+    createButtons(data.lat,data.lng, data)
+    //Credit to
+    return data.timestamp
+}
+
 //I think this is where I should be changing markers to be turf.js points
 function addMarker(data){
         //Turf.JS implementation
@@ -286,18 +321,6 @@ function addMarker(data){
         let use_reason = data.serviceusedreason
         let serviceproblems = data.serviceproblems
         let datetime = data.timestamp
-
-        //Update wordcloud variables here
-        /*
-        var fb_count = 0
-        var fp_count = 0
-        var cf_count = 0
-        var snap_count = 0
-        var wic_count = 0
-        var calfresh_count = 0
-        var none_count = 0 
-
-        */
         markerServicesSplit = services.split(', ');
         console.log(markerServicesSplit);
         markerServicesSplit.forEach(function(element){
@@ -325,9 +348,7 @@ function addMarker(data){
         }
         )
         // create the turfJS point
-      
-        
-        
+
         let thisPoint = turf.point([Number(data.lng),Number(data.lat)],
             {boundary_zipcode, 
             services,
@@ -340,41 +361,13 @@ function addMarker(data){
         //Old marker information
         // console.log(data)
         // these are the names of our fields in the google sheets:  
+        if (data.zipcode == filteredZipcode){
         createButtons(data.lat,data.lng, data)
+        }
         //Credit to
         return data.timestamp
 }
 
-/*
-function addMarkerAlt(data){
-    // console.log(data)
-    // these are the names of our fields in the google sheets:
-    circleOptions.fillColor = "green"
-    notGamers.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
-    .bindPopup(`<h2>${data.whatelsedoyoudoinyoursparetime}</h2>`  + 
-                `<br>${data.location}</br>`))
-                createButtons(data.lat,data.lng,data.location)
-    return data.timestamp
-}
-*/
-
-
-/* OLD CREATE BUTTONS
-function createButtons(lat,lng,data){
-    var title = data.zipcode;
-    console.log(title);
-    const newButton = document.createElement("button"); // adds a new button
-    newButton.id = "button"+title; // gives the button a unique id
-    newButton.innerHTML = title; // gives the button a title
-    newButton.setAttribute("lat",lat); // sets the latitude 
-    newButton.setAttribute("lng",lng); // sets the longitude 
-    newButton.addEventListener('click', function(){
-        map.flyTo([lat,lng]); //this is the flyTo from Leaflet
-    })
-    const contentsDiv = document.getElementById('contents')
-    contentsDiv.appendChild(newButton); //this adds the button to our page.
-}
-*/
 //Modified Button Includes New Testimony Elements
 
 function createButtons(lat,lng, data){
@@ -442,7 +435,7 @@ function processData(theData){
         {
             //check if a specific zipcode output is desired
             if (filteredZipcode == ""){
-                addMarker(formattedData[i]); 
+                addMarkerInit(formattedData[i]); 
             }
             else{
                 if (formattedData[i].zipcode == filteredZipcode) //adds buttons only if matching the filtered zipcode
@@ -567,8 +560,8 @@ window.onclick = function(event) {
 
 
 //Event LIstener
-document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
-document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
+document.getElementById("zipcode_select").addEventListener("change", updateZipcode);
+//document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
 
 
 var data2 = [
