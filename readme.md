@@ -52,6 +52,8 @@ https://hub.arcgis.com/datasets/lacounty::la-county-zip-code/explore?location=33
 ## Source for Survey Data:
 https://docs.google.com/spreadsheets/d/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/edit#gid=946618087
 
+
+
 # Improvements and Integration
 The services and libraries used for this project are all free, in case there is concern about the sustainability of the map financially. To reuse this project for another similar endeavor where it would be useful to imitate the site structure, mapping features, and survey usage should be of no cost to a programmer or the organization they're associated with. The only requirements beyond the code would be a Google Account (to create and hook the site up to a Google Survey and Google Sheets) and a Github account (to utilize Github Pages' free webhosting).
 
