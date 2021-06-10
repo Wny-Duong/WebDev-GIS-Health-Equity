@@ -1,4 +1,13 @@
+//Notes on Data
+// formattedData[i].zipcode in processdata() acts as primary key for sheets data
+// is used to connect to GEOJSON boundaries based on boundary feature property e.target.feature.properties.ZIPCODE  in "Code for Zipcode Boundaries"
+
+//Other issue
+//Currently markers created corresponding to  buttons are one layer lower than the GEOJson boundary layer, this should be changed as they both should be one layer
+//Where the boundaryies in the GEOJson define line/fill rules for the google sheet's properties data.
+
 //SOURCE: https://cliffcloud.github.io/Leaflet.Sleep/
+//This section of code controls sleeping of the map - "You can scroll down on the page while cursor is on the map."
 const map = L.map('map', {
     // true by default, false if you want a wild map
     sleep: true,
@@ -35,10 +44,21 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //Scrollama Declaration
 let scroller = scrollama();
 
-//PROCESS DATA CONTROL VARIABLE - Enables filtering based on a specific clicked zipcode once I figure out how to load one into it.
+//PROCESS DATA CONTROL VARIABLE -  Global variable stores a clicked zipcode value from the GeoJSON
+//Meant to be used for filtering. 
 var filteredZipcode = ""
 
-//Chloropleth Code START ; Controls GEOJson
+//TURF.JS CODE START
+// this is the boundary layer located as a geojson in the /data/ folder 
+const boundaryLayer = "./ZipCode.geojson"
+let boundary; // place holder for the data
+let collected; // variable for turf.js collected points 
+let allPoints = []; // array for all the data points
+
+
+
+
+//Chloropleth Code START ; Controls GEOJson click and hover functionality.
 //REFERENCED CODE: https://leafletjs.com/examples/choropleth/
 function style(feature) {
     return {
@@ -65,20 +85,30 @@ function highlightFeature(e) {
     }
 }
 
-var geojson;
+var geojson; //This creates an initial state to restore GEOJson to pre-highlight appearance once hovering is no longer occurring. 
+             //Order is important here, hover may break if variable declaration does not occur before resetHighlight and the fetch line.
+
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
-    console.log("Highlight")
+  //  console.log("Highlight")
 }
+
+
+
 
 function focusOnZipcode(e) {
     var geojson_zipcode = e.target.feature.properties.ZIPCODE;
     console.log("Feature's Zipcode: " + geojson_zipcode)
     filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
     console.log("Global Zipcode: " + filteredZipcode)
+
+    //Find a way to grab all instances
+
+
 }
 
 function onEachFeature(feature, layer) {
+   console.log(feature)
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
@@ -87,6 +117,9 @@ function onEachFeature(feature, layer) {
 }
 //CHLOROPLETH CODE END
 
+
+
+//TURF.JS CODE END
 //Calling from Google Spreadsheets
 let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
 fetch(url)
@@ -98,14 +131,56 @@ fetch(url)
         processData(data)
     })
 // Code for Zipcode Boundaries
-    fetch("ZipCode.geojson")
+/*
+    fetch("ZipCode.geojson") //fetch line
 	.then(response => {
 		return response.json();
 		})
     .then(data =>{
         // Basic Leaflet method to add GeoJSON data
                         // the leaflet method for adding a geojson
-           geojson = L.geoJSON(data, {
+
+            //Turf.JS stuff
+            //set the boundary to data
+            boundary = data
+
+            // run the turf collect geoprocessing
+            collected = turf.collect(boundary, thePoints, 'userTestimony', 'values');
+
+            // just for fun, you can make buffers instead of the collect too:
+            // collected = turf.buffer(thePoints, 50,{units:'miles'});
+            console.log(collected.features)
+
+           geojson = L.geoJSON(collected, {
+                style: style,
+                
+                function (feature) {
+                    return {color: 'red'};
+                }
+                onEachFeature:  onEachFeature
+            }).bindPopup(function (layer) {
+                return layer.feature.properties.name;
+            }).addTo(map);
+        });
+*/
+
+function getBoundary(layer){
+    fetch(layer)
+    .then(response => {
+        return response.json();
+        })
+    .then(data =>{
+                //set the boundary to data
+                boundary = data
+
+            // run the turf collect geoprocessing
+            collected = turf.collect(boundary, thePoints, 'userTestimony', 'values');
+
+            // just for fun, you can make buffers instead of the collect too:
+            // collected = turf.buffer(thePoints, 50,{units:'miles'});
+            console.log(collected.features)
+
+           geojson = L.geoJSON(collected, {
                 style: style,
                 /*
                 function (feature) {
@@ -114,15 +189,16 @@ fetch(url)
                 onEachFeature:  onEachFeature
             }).bindPopup(function (layer) {
                 return layer.feature.properties.name;
-            }).addTo(map);
-        });
-
-
+            }).addTo(map)
+        }
+    )   
+}
 
 
 
 let userStory = L.featureGroup();
 
+//Keep this; necessary in button creation.
 let circleOptions = {
     radius: 4,
     fillColor: "#ff7800",
@@ -131,6 +207,7 @@ let circleOptions = {
     opacity: 1,
     fillOpacity: 0.8
 }
+
 // define layers
 let layers = {
 	"Submitted Food Scarcity Story": userStory,
@@ -139,15 +216,36 @@ let layers = {
 // add layer control box
 //L.control.layers(null,layers, {collapsed:false}).addTo(map)
 
+
+//addMarker enables creation of buttons on left-hand
+
+//I think this is where I should be changing markers to be turf.js points
 function addMarker(data){
-        // console.log(data)
-        // these are the names of our fields in the google sheets:
-        circleOptions.fillColor = "red"
-        userStory.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
-        .bindPopup(`<h2>${data.list_services}</h2>`  + 
-                    `<br>${data.service_problems}</br>` + `<br>${data.zipcode}</br>`))
-        createButtons(data.lat,data.lng, data)
+        //Turf.JS implementation
+        let boundary_zipcode = data.zipcode
+        let services = data.listservices
+        let use_reason = data.serviceusedreason
+        let serviceproblems = data.serviceproblems
+        let datetime = data.timestamp
+
+        // create the turfJS point
+      
         
+        
+        let thisPoint = turf.point([Number(data.lng),Number(data.lat)],
+            {boundary_zipcode, 
+            services,
+            use_reason,
+            serviceproblems,
+            datetime})
+
+        // put all the turfJS points into `allPoints`
+        allPoints.push(thisPoint)
+        //Old marker information
+        // console.log(data)
+        // these are the names of our fields in the google sheets:  
+        createButtons(data.lat,data.lng, data)
+        //Credit to
         return data.timestamp
 }
 
@@ -237,6 +335,7 @@ function processData(theData){
       formattedData.push(formattedRow)
     }
     // lets see what the data looks like when its clean!
+    console.log("Formatted Data")
     console.log(formattedData)
 
     // we can actually add functions here too
@@ -264,13 +363,26 @@ function processData(theData){
     // make the map zoom to the extent of markers
     let allLayers = L.featureGroup([userStory]);
 
+    //TURF.JS
+    // step 1: turn allPoints into a turf.js featureCollection
+    thePoints = turf.featureCollection(allPoints)
+    console.log("thePoints")
+    console.log(thePoints)
+    
+    // step 2: run the spatial analysis
+    getBoundary(boundaryLayer)
+    console.log('boundary')
+    console.log(boundary)
+    map.fitBounds(thePoints.getBounds()); 
+    
+
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
     var win =  L.control.window(map,
         {title:'Do you have something about food insecurity to share?',
         content:"<a href='survey.html'>  \
         <p> Please follow the link here to submit a new testimony. <\p>"})
     .show()
-    map.fitBounds(allLayers.getBounds());             
+         
     // setup the instance, pass callback functions
     // use the scrollama scroller variable to set it up
     scroller.setup({
@@ -303,31 +415,5 @@ function scrollStepper(thisStep){
 // setup resize event for scrollama incase someone wants to resize the page...
 window.addEventListener("resize", scroller.resize);
 
-
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-var span2 = document.getElementById("close2");
-
-// When the user clicks on the button, open the modal 
-window.onload = function() {
-  modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-span2.onclick = function() {
-    modal.style.display = "none";
-  }
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+//cOUNT NUMBER OF OCCURRANCES OF CERTAIN ZIPCODES.
+console.log()
