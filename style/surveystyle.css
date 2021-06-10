@@ -6,9 +6,10 @@ body{
     grid-template-areas: ". header ." 
                           ". survey ."
                           ". returnbutton ."
-                          ". footer .";
-    background-image: url(https://image.freepik.com/free-vector/vintage-ornamental-flowers-background_52683-28040.jpg);
+                          "footer footer footer";
+    background-image: url(https://image.freepik.com/free-vector/stylish-hexagonal-line-pattern-background_1017-19742.jpg);
     background-size: 300px;
+    font-family: "Roboto", Bold, sans-serif;
 }
 
 
@@ -52,4 +53,7 @@ header{
 footer{
     grid-area: footer;
     font-family: "Roboto", Bold, sans-serif;
+    padding: 1rem;
+    margin: 1rem;
+    text-align: center;
 }
