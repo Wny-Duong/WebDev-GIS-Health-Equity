@@ -74,3 +74,7 @@ We request that all future mapping projects derived from the source code hosted 
  - Resources
    - Resources page has links and descriptions of all the food-services we ask about in our survey.
 # Screenshots
+![image](https://user-images.githubusercontent.com/32424251/121606400-f3905580-ca02-11eb-84f1-52e121ad4f45.png)
+![image](https://user-images.githubusercontent.com/32424251/121606435-02770800-ca03-11eb-98cc-ea449b50486a.png)
+
+![image](https://user-images.githubusercontent.com/32424251/121606372-e5423980-ca02-11eb-9fcc-e056635901ee.png)
