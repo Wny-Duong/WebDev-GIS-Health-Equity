@@ -24,7 +24,7 @@ const map = L.map('map', {
     // opacity (between 0 and 1) of inactive map
     sleepOpacity: .7
 
-}).setView([34.0709, -118.444], 5);
+}).setView([34.0709, -118.444], 12);
 
 let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
@@ -458,3 +458,23 @@ window.onclick = function(event) {
 
 //Event LIstener
 document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
+
+
+//WORD CLOUD
+var fb_count = 0
+var fp_count = 0
+var cf_count = 0
+var snap_count = 0
+var wic_count = 0
+var calfresh_count = 0
+var none_count = 0 
+
+var data = [
+    {"x": "Food Banks", "value": fb_count, category: "Food Banks"},
+    {"x": "Food Pantries", "value": fp_count, category: "Food Pantries"},
+    {"x": "Community Fridges", "value": cf_count, category: "Community Fridges"},
+    {"x": "SNAP (Supplemental Nutrition Assistance Program)", "value": snap_Count, category: "SNAP (Supplemental Nutrition Assistance Program)"},
+    {"x": "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)", "value": wic_count, category: "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)"},
+    {"x": "CalFresh", "value": calfresh_count, category: "CalFresh"},
+    {"x": "None", "value": none_count, category: "None"}
+  ];
