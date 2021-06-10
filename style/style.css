@@ -3,9 +3,9 @@ body{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr; 
     grid-template-rows: 0.1fr 1fr .1fr; 
-    grid-template-areas: " header icon surveybutton " 
+    grid-template-areas: "icon header header" 
                 "contentpanel  mappanel mappanel" 
-                        ". resourcebutton ."
+                        "surveybutton resourcebutton ."
                     "storypanel footer .";
                     background-image: url(https://image.freepik.com/free-vector/stylish-hexagonal-line-pattern-background_1017-19742.jpg);
                     background-size: 300px;

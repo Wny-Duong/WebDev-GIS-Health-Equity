@@ -108,7 +108,7 @@ function focusOnZipcode(e) {
 }
 
 function onEachFeature(feature, layer) {
-  //   console.log(feature.properties)
+   console.log(feature)
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
@@ -368,6 +368,9 @@ function processData(theData){
     thePoints = turf.featureCollection(allPoints)
     console.log("thePoints")
     console.log(thePoints)
+    
+    surveyDataArray.filter(data=>data.zipcode ==filteredZipcode)
+
     // step 2: run the spatial analysis
     getBoundary(boundaryLayer)
     console.log('boundary')
