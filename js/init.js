@@ -99,7 +99,18 @@ function highlightFeature(e) {
         dashArray: '',
         fillOpacity: 0.7
     });
-    
+
+    if (filteredZipcode == layer.feature.properties.zipcode)
+    {
+        layer.setStyle({
+            weight: 5,
+            color: '#17fc7a',
+            dashArray: '',
+            fillOpacity: 0.7,
+            fillColor: 'green',
+        });
+    }
+
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront(); //Highlights whole zipcode regeion.
     }
@@ -111,6 +122,17 @@ var geojson; //This creates an initial state to restore GEOJson to pre-highlight
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
   //  console.log("Highlight")
+  var layer = e.target;
+  if (filteredZipcode == layer.feature.properties.zipcode)
+  {
+      layer.setStyle({
+          weight: 5,
+          color: '#17fc7a',
+          dashArray: '',
+          fillOpacity: 0.7,
+          fillColor: 'green',
+      });
+  }
 }
 
 
@@ -124,17 +146,31 @@ function focusOnZipcode(e) {
     console.log("Global Zipcode: " + filteredZipcode)
     console.log(e.target.feature.properties)
     //Find a way to grab all instances
+    
 
 
 }
 
 function onEachFeature(feature, layer) {
    console.log(feature)
+  // var layer = e.target;
+  console.log(filteredZipcode)
+  console.log(layer.feature.properties.zipcode)
+   if (filteredZipcode == layer.feature.properties.zipcode)
+     {
+         layer.setStyle({
+             weight: 5,
+             color: '#17fc7a',
+             dashArray: '',
+             fillOpacity: 0.7
+         });
+     }
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
         click: focusOnZipcode
     });
+    
 }
 //CHLOROPLETH CODE END
 
@@ -151,6 +187,8 @@ fetch(url)
         // console.log(data)
         processData(data)
     })
+
+
 // Code for Zipcode Boundaries
 /*
     fetch("ZipCode.geojson") //fetch line
@@ -529,6 +567,7 @@ window.onclick = function(event) {
 
 
 //Event LIstener
+document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
 document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
 
 

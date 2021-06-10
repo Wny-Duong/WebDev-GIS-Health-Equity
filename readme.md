@@ -47,7 +47,8 @@ From the web page hosting the web map, we also allow community members to direct
     - This web map is being hosted through Github Pages at zero financial cost to the team behind this iteration of the map.
  - Turf.js
    - This library is used for geospatial analytics. In this case, it's used for GeoJSON layer interactivity alongside Leaflet and the display of response frequency based on zip code areas.
- 
+ - AnyChart
+   - This library is used for creating embedded charts and graphs. In this case, it's used for the control window within the map to display the word cloud which shows which food-services are used more frequently based on user survey responses.
 ## Source for Geojson: 
 https://hub.arcgis.com/datasets/lacounty::la-county-zip-code/explore?location=33.810100%2C-118.298800%2C9.03
 
@@ -68,4 +69,8 @@ We request that all future mapping projects derived from the source code hosted 
    - Drop-down filtering is used to allow users to specify the focus of the site on certain zip-codes and neighborhoods. Selecting a certain zipcode will display only stories associated with that zipcode.
  - Geospatial Analytics
    - Users of the site can see which parts of West LA get the most submitted narratives.
+ - Word Cloud
+   - Users can see what food services are utilized more depending on the zipcode that is selected.
+ - Resources
+   - Resources page has links and descriptions of all the food-services we ask about in our survey.
 # Screenshots
