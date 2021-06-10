@@ -3,7 +3,7 @@ body{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr; 
     grid-template-rows: 0.1fr 1fr .1fr; 
-    grid-template-areas: "icon header header" 
+    grid-template-areas: "icon header selectfilter" 
                 "contentpanel  mappanel mappanel" 
                         "surveybutton resourcebutton ."
                     "storypanel footer .";
@@ -11,7 +11,10 @@ body{
                     background-size: 300px;
 
 }
+#selectfilter {
+    grid-area: selectfilter;
 
+}
 #returnbutton {
     grid-area: returnbutton;
     margin-top: auto;
