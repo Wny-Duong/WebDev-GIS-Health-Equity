@@ -72,6 +72,7 @@ function updateZipcode()
         // console.log(data)
         processData(data)
     })
+    console.log("passing 1")
 }
 //TURF.JS CODE START
 // this is the boundary layer located as a geojson in the /data/ folder 
@@ -560,7 +561,7 @@ window.onclick = function(event) {
 
 
 //Event LIstener
-document.getElementById("zipcode_select").addEventListener("change", updateZipcode);
+//document.getElementById("zipcode_select").addEventListener("change", updateZipcode);
 //document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
 
 
