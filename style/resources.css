@@ -14,8 +14,8 @@ body{
                         "r3img r3"
                         "r4img r4";
     background-color: rgb(206, 203, 186);
-    opacity: 0.7;
-    margin: 0.5rem;
+    opacity: 0.8;
+    margin: 1.1rem;
     border-radius: 2px;
     padding: 0.5rem;
 
@@ -23,45 +23,64 @@ body{
 
 #r1 {
     grid-area: r1;
-    padding: 1.2rem;
+    padding: 1.4rem;
+    margin-top:1rem;
     
 }
 
 #r2 {
     grid-area: r2;
-    padding: 1.2rem;
+    padding: 1.4rem;
 }
 
 #r3 {
     grid-area: r3;
-    padding: 1.2rem;
+    padding: 1.4rem;
 }
 
 
 #r4 {
     grid-area: r4;
-    padding: 1.2rem;
+    padding: 1.4rem;
 }
 
 #r1img {
     grid-area: r1img;
+    opacity: 1.0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #r2img {
     grid-area: r2img;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #r3img {
     grid-area: r3img;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #r4img {
     grid-area: r4img;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-img {
+div#resources img {
     width: 10rem;
-    margin: 1rem;;
+    margin: 1rem;
+    opacity: 1;
 }
 
 header {
@@ -72,6 +91,19 @@ header {
     margin: 1rem;
 }
 
+a {
+    font-family: "Roboto", Bold, sans-serif;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: rgb(14, 72, 119);
+}
 
+a:hover {
+    color: rgb(79, 80, 85);
+}
 
-
+p {
+    font-family: "Roboto", Bold, sans-serif;
+    padding-right: 1rem;
+}
