@@ -92,7 +92,7 @@ let allPoints = []; // array for all the data points
 function style(feature) {
     
     return {
-        fillColor: 'red',
+        fillColor: 'rgba(255,100,96,.9)',
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -107,14 +107,14 @@ function highlightFeature(e) {
         weight: 5,
         color: '#666',
         dashArray: '',
-        fillOpacity: 0.7
+        fillOpacity: 1
     });
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront(); //Highlights whole zipcode regeion.
     }
 }
 
-var geojson; //This creates an initial state to restore GEOJson to pre-highlight appearance once hovering is no longer occurring. 
+let geojson; //This creates an initial state to restore GEOJson to pre-highlight appearance once hovering is no longer occurring. 
              //Order is important here, hover may break if variable declaration does not occur before resetHighlight and the fetch line.
 
 function resetHighlight(e) {
@@ -150,10 +150,10 @@ function onEachFeature(feature, layer) {
      {
          layer.setStyle({
              weight: 5,
-             color: '#17fc7a',
+             color: '#4842f5',
              dashArray: '',
-             fillOpacity: 0.7,
-             fillColor: 'green'
+             fillOpacity: 1,
+             fillColor: 'blue'
          });
      }
     layer.on({
