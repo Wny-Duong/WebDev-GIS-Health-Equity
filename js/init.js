@@ -48,6 +48,16 @@ let scroller = scrollama();
 //Meant to be used for filtering. 
 var filteredZipcode = ""
 
+//TURF.JS CODE START
+// this is the boundary layer located as a geojson in the /data/ folder 
+const boundaryLayer = "./ZipCode.geojson"
+let boundary; // place holder for the data
+let collected; // variable for turf.js collected points 
+let allPoints = []; // array for all the data points
+
+
+
+
 //Chloropleth Code START ; Controls GEOJson click and hover functionality.
 //REFERENCED CODE: https://leafletjs.com/examples/choropleth/
 function style(feature) {
@@ -107,6 +117,9 @@ function onEachFeature(feature, layer) {
 }
 //CHLOROPLETH CODE END
 
+
+
+//TURF.JS CODE END
 //Calling from Google Spreadsheets
 let url = 'https://spreadsheets.google.com/feeds/list/1uEUH1FxE0G9NLkTQoi_-QuGZF6JmQJIVl6rxE9umTZQ/ofnlb99/public/values?alt=json'
 fetch(url)
@@ -118,6 +131,7 @@ fetch(url)
         processData(data)
     })
 // Code for Zipcode Boundaries
+/*
     fetch("ZipCode.geojson") //fetch line
 	.then(response => {
 		return response.json();
@@ -125,7 +139,48 @@ fetch(url)
     .then(data =>{
         // Basic Leaflet method to add GeoJSON data
                         // the leaflet method for adding a geojson
-           geojson = L.geoJSON(data, {
+
+            //Turf.JS stuff
+            //set the boundary to data
+            boundary = data
+
+            // run the turf collect geoprocessing
+            collected = turf.collect(boundary, thePoints, 'userTestimony', 'values');
+
+            // just for fun, you can make buffers instead of the collect too:
+            // collected = turf.buffer(thePoints, 50,{units:'miles'});
+            console.log(collected.features)
+
+           geojson = L.geoJSON(collected, {
+                style: style,
+                
+                function (feature) {
+                    return {color: 'red'};
+                }
+                onEachFeature:  onEachFeature
+            }).bindPopup(function (layer) {
+                return layer.feature.properties.name;
+            }).addTo(map);
+        });
+*/
+
+function getBoundary(layer){
+    fetch(layer)
+    .then(response => {
+        return response.json();
+        })
+    .then(data =>{
+                //set the boundary to data
+                boundary = data
+
+            // run the turf collect geoprocessing
+            collected = turf.collect(boundary, thePoints, 'userTestimony', 'values');
+
+            // just for fun, you can make buffers instead of the collect too:
+            // collected = turf.buffer(thePoints, 50,{units:'miles'});
+            console.log(collected.features)
+
+           geojson = L.geoJSON(collected, {
                 style: style,
                 /*
                 function (feature) {
@@ -134,10 +189,10 @@ fetch(url)
                 onEachFeature:  onEachFeature
             }).bindPopup(function (layer) {
                 return layer.feature.properties.name;
-            }).addTo(map);
-        });
-
-
+            }).addTo(map)
+        }
+    )   
+}
 
 
 
@@ -166,12 +221,29 @@ let layers = {
 
 //I think this is where I should be changing markers to be turf.js points
 function addMarker(data){
+        //Turf.JS implementation
+        let boundary_zipcode = data.zipcode
+        let services = data.listservices
+        let use_reason = data.serviceusedreason
+        let serviceproblems = data.serviceproblems
+        let datetime = data.timestamp
+
+        // create the turfJS point
+      
+        
+        
+        let thisPoint = turf.point([Number(data.lng),Number(data.lat)],
+            {boundary_zipcode, 
+            services,
+            use_reason,
+            serviceproblems,
+            datetime})
+
+        // put all the turfJS points into `allPoints`
+        allPoints.push(thisPoint)
+        //Old marker information
         // console.log(data)
         // these are the names of our fields in the google sheets:
-        circleOptions.fillColor = "red"
-        userStory.addLayer(L.circleMarker([data.lat,data.lng], circleOptions)
-        .bindPopup(`<h2>${data.list_services}</h2>`  + 
-                    `<br>${data.service_problems}</br>` + `<br>${data.zipcode}</br>`))
         createButtons(data.lat,data.lng, data)
         //Credit to
         return data.timestamp
@@ -290,6 +362,18 @@ function processData(theData){
     }
     // make the map zoom to the extent of markers
     let allLayers = L.featureGroup([userStory]);
+
+    //TURF.JS
+    // step 1: turn allPoints into a turf.js featureCollection
+    thePoints = turf.featureCollection(allPoints)
+    console.log("thePoints")
+    console.log(thePoints)
+    // step 2: run the spatial analysis
+    getBoundary(boundaryLayer)
+    console.log('boundary')
+    console.log(boundary)
+    map.fitBounds(allLayers.getBounds()); 
+
 
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
     var win =  L.control.window(map,
