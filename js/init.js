@@ -59,9 +59,18 @@ var filteredZipcode = ""
 
 function updateZipcode()
 {
+    //Hard Reset All Created Elements
     while (document.getElementById('contents').firstChild) {
         document.getElementById('contents').removeChild(document.getElementById('contents').firstChild);
     }
+     fb_count = 0
+     fp_count = 0
+     cf_count = 0
+     snap_count = 0
+     wic_count = 0
+     calfresh_count = 0
+     none_count = 0 
+
     filteredZipcode = document.getElementById("zipcode_select").value;
     console.log(filteredZipcode)
     fetch(url)
@@ -84,6 +93,7 @@ let allPoints = []; // array for all the data points
 //Chloropleth Code START ; Controls GEOJson click and hover functionality.
 //REFERENCED CODE: https://leafletjs.com/examples/choropleth/
 function style(feature) {
+    
     return {
         fillColor: 'red',
         weight: 2,
@@ -111,6 +121,7 @@ var geojson; //This creates an initial state to restore GEOJson to pre-highlight
              //Order is important here, hover may break if variable declaration does not occur before resetHighlight and the fetch line.
 
 function resetHighlight(e) {
+    if (e.target.feature.properties.zipcode != filteredZipcode)
     geojson.resetStyle(e.target);
   //  console.log("Highlight")
   var layer = e.target;
