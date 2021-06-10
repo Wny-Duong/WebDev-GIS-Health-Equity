@@ -48,15 +48,20 @@ let scroller = scrollama();
 //Meant to be used for filtering. 
 var filteredZipcode = ""
 
+function updateZipcode(zippy)
+{
+    filteredZipcode = document.getElementById(zippy);
+    console.log(filteredZipcode)
+}
+
+//
+
 //TURF.JS CODE START
 // this is the boundary layer located as a geojson in the /data/ folder 
 const boundaryLayer = "./ZipCode.geojson"
 let boundary; // place holder for the data
 let collected; // variable for turf.js collected points 
 let allPoints = []; // array for all the data points
-
-
-
 
 //Chloropleth Code START ; Controls GEOJson click and hover functionality.
 //REFERENCED CODE: https://leafletjs.com/examples/choropleth/
@@ -97,9 +102,9 @@ function resetHighlight(e) {
 
 
 function focusOnZipcode(e) {
-    var geojson_zipcode = e.target.feature.properties.ZIPCODE;
+    let  geojson_zipcode = e.feature.properties.zipcode;
     console.log("Feature's Zipcode: " + geojson_zipcode)
-    filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
+    //filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
     console.log("Global Zipcode: " + filteredZipcode)
 
     //Find a way to grab all instances
@@ -361,7 +366,7 @@ function processData(theData){
         }
     }
     // make the map zoom to the extent of markers
-    let allLayers = L.featureGroup([userStory]);
+    //let allLayers = L.featureGroup([userStory]);
 
     //TURF.JS
     // step 1: turn allPoints into a turf.js featureCollection
