@@ -1,15 +1,74 @@
 @import url(//fonts.googleapis.com/css?family=Roboto);
 body{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr; 
-    grid-template-rows: 0.1fr 1fr .1fr; 
-    grid-template-areas: "header selectfilter selectfilter icon" 
-                "contentpanel  mappanel mappanel mappanel" 
+    grid-template-columns: 1fr 1fr 1fr 1fr; 
+    grid-template-rows: 0.1fr 0.1fr 0.1fr 1fr .1fr; 
+    grid-template-areas: "header header header header"
+                        "surveybutton surveybutton resourcebutton resourcebutton"
+                        ". . selectfilter selectfilter" 
+                        "contentpanel  mappanel mappanel mappanel" 
                         ". . . ."
                     "storypanel footer . .";
                     background-image: url(https://image.freepik.com/free-vector/stylish-hexagonal-line-pattern-background_1017-19742.jpg);
                     background-size: 300px;
 
+}
+#title {
+    width: 60%;
+    display: flex;
+    float: right;
+    margin: 2rem;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    margin-top:none;
+    padding-bottom: none;
+    padding-left: none;
+}
+
+#surveybutton {
+    grid-area: surveybutton;
+    margin: 1rem;
+}
+
+#resourcebutton {
+    grid-area: resourcebutton;
+    margin: 1rem;
+}
+
+#img_icon {
+    width:20%;
+    display: flex;
+    float: center;
+    margin: 2rem;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    margin-top: none;
+    padding-right: none;
+}
+
+img {
+    max-width: 17rem;
+    max-height: 17rem;
+    margin-top:70px;
+    margin-bottom: 70px;
+}
+
+header{
+    grid-area: header;
+    font-family: "Roboto", Bold, sans-serif;
+    font-size: xxx-large;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    margin-top: -90px;
+    margin-bottom: -60px;
+
+    
+}
+
+#label {
+    font-family: "Roboto", Bold, sans-serif;
+    margin: 10px;
 }
 
 #window {
@@ -21,12 +80,16 @@ body{
     padding: 0; 
 }
 
-#selectfilter {
+#select_filter {
     grid-area: selectfilter;
-    min-height: 400px;
-    min-width: 400px;
+    min-width: 4rem;
+    min-height: 2rem;
     margin-left: auto;
-  margin-right: auto;
+    margin-right: auto;
+    text-align: right;
+    display: flex;
+    float: right;
+    margin: 1rem;
 }
 #returnbutton {
     grid-area: returnbutton;
@@ -85,25 +148,11 @@ body{
     overflow-y:scroll; /* adds a vertical scroll-bar to this div */
 }
 
-header{
-    grid-area: header;
-    font-family: "Roboto", Bold, sans-serif;
-    font-size: xxx-large;
-    font-weight: bold;
-    margin-left: auto;
-    margin-right: auto;
-    
-}
+
 footer{
     grid-area: footer;
     font-family: "Roboto", Bold, sans-serif;
     font-weight: italic;
-}
-
-img{
-    max-width: 100%;
-    max-height: 100%;
-    display: block; /* remove extra space below image */
 }
 
 a {
