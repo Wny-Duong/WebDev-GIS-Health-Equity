@@ -14,8 +14,8 @@ body{
                         "r3img r3"
                         "r4img r4";
     background-color: rgb(206, 203, 186);
-    opacity: 0.7;
-    margin: 0.5rem;
+    opacity: 0.8;
+    margin: 1.1rem;
     border-radius: 2px;
     padding: 0.5rem;
 
@@ -47,18 +47,34 @@ body{
 #r1img {
     grid-area: r1img;
     opacity: 1.0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #r2img {
     grid-area: r2img;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #r3img {
     grid-area: r3img;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #r4img {
     grid-area: r4img;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 div#resources img {
@@ -85,8 +101,9 @@ a {
 
 a:hover {
     color: rgb(79, 80, 85);
-  }
+}
 
-
-
-
+p {
+    font-family: "Roboto", Bold, sans-serif;
+    padding-right: 1rem;
+}
