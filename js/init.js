@@ -14,7 +14,6 @@ var snap_count = 0
 var wic_count = 0
 var calfresh_count = 0
 var none_count = 0 
-
 //SOURCE: https://cliffcloud.github.io/Leaflet.Sleep/
 //This section of code controls sleeping of the map - "You can scroll down on the page while cursor is on the map."
 const map = L.map('map', {
@@ -57,6 +56,7 @@ let scroller = scrollama();
 //Meant to be used for filtering. 
 var filteredZipcode = ""
 
+//Updating zipcode, select zipcode.
 function updateZipcode()
 {
     //Hard Reset All Created Elements
@@ -70,6 +70,8 @@ function updateZipcode()
      wic_count = 0
      calfresh_count = 0
      none_count = 0 
+
+    document.getElementById("window").innerHTML = ""
 
     filteredZipcode = document.getElementById("zipcode_select").value;
     console.log(filteredZipcode)
@@ -488,7 +490,7 @@ function processData(theData){
       {"x": "CalFresh", "value": calfresh_count, category: "CalFresh"},
       {"x": "None", "value": none_count, category: "None"}
     ];// create a tag (word) cloud chart
-    var chart = anychart.tagCloud(data);// set a chart title
+    chart = anychart.tagCloud(data);// set a chart title
    // chart.title('15 most spoken languages')
     // set an array of angles at which the words will be laid out
     chart.angles([0])
@@ -571,43 +573,6 @@ window.onclick = function(event) {
 } 
 
 
-//Event LIstener
-//document.getElementById("zipcode_select").addEventListener("change", updateZipcode);
-//document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
-
-
-var data2 = [
-    {"x": "Food Banks", "value": fb_count, category: "Food Banks"},
-    {"x": "Food Pantries", "value": fp_count, category: "Food Pantries"},
-    {"x": "Community Fridges", "value": cf_count, category: "Community Fridges"},
-    {"x": "SNAP (Supplemental Nutrition Assistance Program)", "value": snap_count, category: "SNAP (Supplemental Nutrition Assistance Program)"},
-    {"x": "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)", "value": wic_count, category: "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)"},
-    {"x": "CalFresh", "value": calfresh_count, category: "CalFresh"},
-    {"x": "None", "value": none_count, category: "None"}
-  ];
-/*
-anychart.onDocumentReady(function() {
-  var data = [
-    {"x": "Food Banks", "value": fb_count, category: "Food Banks"},
-    {"x": "Food Pantries", "value": fp_count, category: "Food Pantries"},
-    {"x": "Community Fridges", "value": cf_count, category: "Community Fridges"},
-    {"x": "SNAP (Supplemental Nutrition Assistance Program)", "value": snap_count, category: "SNAP (Supplemental Nutrition Assistance Program)"},
-    {"x": "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)", "value": wic_count, category: "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)"},
-    {"x": "CalFresh", "value": calfresh_count, category: "CalFresh"},
-    {"x": "None", "value": none_count, category: "None"}
-  ];// create a tag (word) cloud chart
-  var chart = anychart.tagCloud(data);// set a chart title
-  chart.title('15 most spoken languages')
-  // set an array of angles at which the words will be laid out
-  chart.angles([0])
-  // enable a color range
-  chart.colorRange(true);
-  // set the color range length
-  chart.colorRange().length('80%');// display the word cloud chart
-  chart.container('window');
-  chart.draw();
-});
-*/
 //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
 var win =  L.control.window(map,
     {title:'Services People Use in this Zipcode',
