@@ -1,4 +1,13 @@
+//Notes on Data
+// formattedData[i].zipcode in processdata() acts as primary key for sheets data
+// is used to connect to GEOJSON boundaries based on boundary feature property e.target.feature.properties.ZIPCODE  in "Code for Zipcode Boundaries"
+
+//Other issue
+//Currently markers created corresponding to  buttons are one layer lower than the GEOJson boundary layer, this should be changed as they both should be one layer
+//Where the boundaryies in the GEOJson define line/fill rules for the google sheet's properties data.
+
 //SOURCE: https://cliffcloud.github.io/Leaflet.Sleep/
+//This section of code controls sleeping of the map - "You can scroll down on the page while cursor is on the map."
 const map = L.map('map', {
     // true by default, false if you want a wild map
     sleep: true,
@@ -35,10 +44,11 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //Scrollama Declaration
 let scroller = scrollama();
 
-//PROCESS DATA CONTROL VARIABLE - Enables filtering based on a specific clicked zipcode once I figure out how to load one into it.
+//PROCESS DATA CONTROL VARIABLE -  Global variable stores a clicked zipcode value from the GeoJSON
+//Meant to be used for filtering. 
 var filteredZipcode = ""
 
-//Chloropleth Code START ; Controls GEOJson
+//Chloropleth Code START ; Controls GEOJson click and hover functionality.
 //REFERENCED CODE: https://leafletjs.com/examples/choropleth/
 function style(feature) {
     return {
@@ -65,20 +75,30 @@ function highlightFeature(e) {
     }
 }
 
-var geojson;
+var geojson; //This creates an initial state to restore GEOJson to pre-highlight appearance once hovering is no longer occurring. 
+             //Order is important here, hover may break if variable declaration does not occur before resetHighlight and the fetch line.
+
 function resetHighlight(e) {
     geojson.resetStyle(e.target);
-    console.log("Highlight")
+  //  console.log("Highlight")
 }
+
+
+
 
 function focusOnZipcode(e) {
     var geojson_zipcode = e.target.feature.properties.ZIPCODE;
     console.log("Feature's Zipcode: " + geojson_zipcode)
     filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
     console.log("Global Zipcode: " + filteredZipcode)
+
+    //Find a way to grab all instances
+
+
 }
 
 function onEachFeature(feature, layer) {
+  //   console.log(feature.properties)
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
@@ -98,7 +118,7 @@ fetch(url)
         processData(data)
     })
 // Code for Zipcode Boundaries
-    fetch("ZipCode.geojson")
+    fetch("ZipCode.geojson") //fetch line
 	.then(response => {
 		return response.json();
 		})
@@ -123,6 +143,7 @@ fetch(url)
 
 let userStory = L.featureGroup();
 
+//Keep this; necessary in button creation.
 let circleOptions = {
     radius: 4,
     fillColor: "#ff7800",
@@ -131,6 +152,7 @@ let circleOptions = {
     opacity: 1,
     fillOpacity: 0.8
 }
+
 // define layers
 let layers = {
 	"Submitted Food Scarcity Story": userStory,
@@ -139,6 +161,10 @@ let layers = {
 // add layer control box
 //L.control.layers(null,layers, {collapsed:false}).addTo(map)
 
+
+//addMarker enables creation of buttons on left-hand
+
+//I think this is where I should be changing markers to be turf.js points
 function addMarker(data){
         // console.log(data)
         // these are the names of our fields in the google sheets:
@@ -147,7 +173,7 @@ function addMarker(data){
         .bindPopup(`<h2>${data.list_services}</h2>`  + 
                     `<br>${data.service_problems}</br>` + `<br>${data.zipcode}</br>`))
         createButtons(data.lat,data.lng, data)
-        
+        //Credit to
         return data.timestamp
 }
 
@@ -237,6 +263,7 @@ function processData(theData){
       formattedData.push(formattedRow)
     }
     // lets see what the data looks like when its clean!
+    console.log("Formatted Data")
     console.log(formattedData)
 
     // we can actually add functions here too
@@ -302,3 +329,6 @@ function scrollStepper(thisStep){
 
 // setup resize event for scrollama incase someone wants to resize the page...
 window.addEventListener("resize", scroller.resize);
+
+//cOUNT NUMBER OF OCCURRANCES OF CERTAIN ZIPCODES.
+console.log()
