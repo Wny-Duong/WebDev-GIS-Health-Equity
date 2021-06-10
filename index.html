@@ -14,11 +14,11 @@
 
         <!-- add scrollama -->
         <script src="https://unpkg.com/intersection-observer"></script>
-        
+
         <!-- scrollama -->
         <script src='./js/scrollama.js'></script>
-        <!-- note: we are using a customized version of scrollama that the dev made here: 
-        https://github.com/russellgoldenberg/scrollama/issues/122 --> 
+        <!-- note: we are using a customized version of scrollama that the dev made here:
+        https://github.com/russellgoldenberg/scrollama/issues/122 -->
 
           <!-- Leaflet Control Window-->
         <script src="js/control_window.js"></script>
@@ -26,6 +26,10 @@
 
         <!-- Map Sleep Script-->
         <script src="js/sleep.js"></script>
+
+        <!--Any Chart-->
+        <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+        <script src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
 
         <!-- TurfJS -->
         <!-- Adding the TurfJs library  -->
@@ -35,13 +39,13 @@
         <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
         <script src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
     </head>
-    
+
     <body>
         <header>
             What Does West LA Have to Say About Food Insecurity?<!-- added this-->
-            
-        </header> 
-        
+
+        </header>
+
         <div id ='icon'>
             <img src="style/food-court.png" alt="Food Icon">
         </div>
@@ -70,8 +74,8 @@
                             <button class="btn" id="close2">Go To Map</button>
                         </div>
                     </div>
-            
-                    </div> 
+
+                    </div>
         <div id="contents"></div>
         <div id = wordcloud_container> </div>
         <div id ="select_filter">
@@ -91,17 +95,17 @@
          Because we will define the layout in CSS Grid -->
 
         <div id="map"></div>
-        
-        
+
+
         <div id="surveybutton">
-            <a href="survey.html"> Please Fill Out a New Response Here! </a> 
+            <a href="survey.html"> Please Fill Out a New Response Here! </a>
         </div>
         <div id="resourcebutton">
-            <a href="resources.html"> Find Resources Here </a> 
+            <a href="resources.html"> Find Resources Here </a>
         </div>
 
         <footer>
-            
+
         </footer> <!-- added this -->
         <script src="js/init.js"></script>
     </body>
