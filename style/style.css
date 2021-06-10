@@ -5,7 +5,7 @@ body{
     grid-template-rows: 0.1fr 0.1fr 0.1fr 1fr .1fr; 
     grid-template-areas: "header header header header"
                         "surveybutton surveybutton resourcebutton resourcebutton"
-                        ". . . selectfilter" 
+                        ". . selectfilter selectfilter" 
                         "contentpanel  mappanel mappanel mappanel" 
                         ". . . ."
                     "storypanel footer . .";
@@ -28,13 +28,11 @@ body{
 #surveybutton {
     grid-area: surveybutton;
     margin: 1rem;
-    text-align: center;
 }
 
 #resourcebutton {
     grid-area: resourcebutton;
     margin: 1rem;
-    text-align: center;
 }
 
 #img_icon {
@@ -71,7 +69,6 @@ header{
 #label {
     font-family: "Roboto", Bold, sans-serif;
     margin: 10px;
-    font-weight: bold;
 }
 
 #window {
@@ -89,14 +86,10 @@ header{
     min-height: 2rem;
     margin-left: auto;
     margin-right: auto;
-    text-align: center;
+    text-align: right;
+    display: flex;
     float: right;
     margin: 1rem;
-    margin-right: none;
-    background-color: rgb(206, 203, 186);
-    padding: 0.5rem;
-    border-radius: 4px;
-    opacity: .7;
 }
 
 
