@@ -6,7 +6,7 @@
 //Currently markers created corresponding to  buttons are one layer lower than the GEOJson boundary layer, this should be changed as they both should be one layer
 //Where the boundaryies in the GEOJson define line/fill rules for the google sheet's properties data.
 
-//WORD CLOUD
+//WORD CLOUD INITIALIZED SET
 var fb_count = 0
 var fp_count = 0
 var cf_count = 0
@@ -14,6 +14,7 @@ var snap_count = 0
 var wic_count = 0
 var calfresh_count = 0
 var none_count = 0 
+
 //SOURCE: https://cliffcloud.github.io/Leaflet.Sleep/
 //This section of code controls sleeping of the map - "You can scroll down on the page while cursor is on the map."
 const map = L.map('map', {
@@ -39,15 +40,9 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 	maxZoom: 16
 });
 
-//https://leafletjs.com/examples/geojson/ For help working with geojson markers.
 
 Esri_WorldGrayCanvas.addTo(map)
 
-/*
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-*/
 
 //Scrollama Declaration
 let scroller = scrollama();
@@ -183,42 +178,6 @@ fetch(url)
         // console.log(data)
         processData(data)
     })
-
-
-// Code for Zipcode Boundaries
-/*
-    fetch("ZipCode.geojson") //fetch line
-	.then(response => {
-		return response.json();
-		})
-    .then(data =>{
-        // Basic Leaflet method to add GeoJSON data
-                        // the leaflet method for adding a geojson
-
-            //Turf.JS stuff
-            //set the boundary to data
-            boundary = data
-
-            // run the turf collect geoprocessing
-            collected = turf.collect(boundary, thePoints, 'userTestimony', 'values');
-
-            // just for fun, you can make buffers instead of the collect too:
-            // collected = turf.buffer(thePoints, 50,{units:'miles'});
-            console.log(collected.features)
-
-           geojson = L.geoJSON(collected, {
-                style: style,
-                
-                function (feature) {
-                    return {color: 'red'};
-                }
-                onEachFeature:  onEachFeature
-            }).bindPopup(function (layer) {
-                return layer.feature.properties.name;
-            }).addTo(map);
-        });
-*/
-
 function getBoundary(layer){
     fetch(layer)
     .then(response => {
@@ -267,9 +226,6 @@ let circleOptions = {
 let layers = {
 	"Submitted Food Scarcity Story": userStory,
 }
-
-// add layer control box
-//L.control.layers(null,layers, {collapsed:false}).addTo(map)
 
 
 //addMarker enables creation of buttons on left-hand
@@ -503,14 +459,6 @@ function processData(theData){
 
     chart.draw();
   });
-  
-
-    //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
-   /* var win =  L.control.window(map,
-        {title:'Services People Use in this Zipcode',
-        content:"<div id='container'></div> \
-        <script></script>"})
-    .show()*/
          
     // setup the instance, pass callback functions
     // use the scrollama scroller variable to set it up
