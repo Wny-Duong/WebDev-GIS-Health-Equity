@@ -454,6 +454,8 @@ function processData(theData){
     // set the color range length
     chart.colorRange().length('100%');// display the word cloud chart
     chart.container('window');
+    chart.normal().fontWeight(1000);
+
     chart.draw();
   });
   
