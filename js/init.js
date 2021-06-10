@@ -369,8 +369,6 @@ function processData(theData){
     console.log("thePoints")
     console.log(thePoints)
     
-    surveyDataArray.filter(data=>data.zipcode ==filteredZipcode)
-
     // step 2: run the spatial analysis
     getBoundary(boundaryLayer)
     console.log('boundary')
