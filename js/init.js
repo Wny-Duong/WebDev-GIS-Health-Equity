@@ -6,6 +6,15 @@
 //Currently markers created corresponding to  buttons are one layer lower than the GEOJson boundary layer, this should be changed as they both should be one layer
 //Where the boundaryies in the GEOJson define line/fill rules for the google sheet's properties data.
 
+//WORD CLOUD
+var fb_count = 0
+var fp_count = 0
+var cf_count = 0
+var snap_count = 0
+var wic_count = 0
+var calfresh_count = 0
+var none_count = 0 
+
 //SOURCE: https://cliffcloud.github.io/Leaflet.Sleep/
 //This section of code controls sleeping of the map - "You can scroll down on the page while cursor is on the map."
 const map = L.map('map', {
@@ -113,7 +122,7 @@ function focusOnZipcode(e) {
     console.log("Feature's Zipcode: " + geojson_zipcode)
     //filteredZipcode = geojson_zipcode; //update global filteredZipcode variable
     console.log("Global Zipcode: " + filteredZipcode)
-
+    console.log(e.target.feature.properties)
     //Find a way to grab all instances
 
 
@@ -240,6 +249,43 @@ function addMarker(data){
         let serviceproblems = data.serviceproblems
         let datetime = data.timestamp
 
+        //Update wordcloud variables here
+        /*
+        var fb_count = 0
+        var fp_count = 0
+        var cf_count = 0
+        var snap_count = 0
+        var wic_count = 0
+        var calfresh_count = 0
+        var none_count = 0 
+
+        */
+        markerServicesSplit = services.split(', ');
+        console.log(markerServicesSplit);
+        markerServicesSplit.forEach(function(element){
+            if (element == "Food Banks"){
+                fb_count +=1;
+            }
+            else if (element =="Food Pantries"){
+                fp_count +=1;  
+            }
+            else if (element =="Community Fridges"){
+                cf_count+=1
+            }
+            else if (element == "SNAP (Supplemental Nutrition Assistance Program)"){
+                snap_count+=1
+            }
+            else if (element == "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)"){
+                wic_count+=1
+            }
+            else if (element == "CalFresh"){
+                calfresh_count+=1
+            }
+            else if (element =="None"){
+                none_count+=1
+            }
+        }
+        )
         // create the turfJS point
       
         
@@ -388,6 +434,30 @@ function processData(theData){
    // map.fitBounds(thePoints.getBounds()); 
     
 
+   //Word Cloud Code Here (Do not move, needed here to get updated count values.)
+   anychart.onDocumentReady(function() {
+    var data = [
+      {"x": "Food Banks", "value": fb_count, category: "Food Banks"},
+      {"x": "Food Pantries", "value": fp_count, category: "Food Pantries"},
+      {"x": "Community Fridges", "value": cf_count, category: "Community Fridges"},
+      {"x": "SNAP (Supplemental Nutrition Assistance Program)", "value": snap_count, category: "SNAP (Supplemental Nutrition Assistance Program)"},
+      {"x": "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)", "value": wic_count, category: "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)"},
+      {"x": "CalFresh", "value": calfresh_count, category: "CalFresh"},
+      {"x": "None", "value": none_count, category: "None"}
+    ];// create a tag (word) cloud chart
+    var chart = anychart.tagCloud(data);// set a chart title
+   // chart.title('15 most spoken languages')
+    // set an array of angles at which the words will be laid out
+    chart.angles([0])
+    // enable a color range
+    chart.colorRange(true);
+    // set the color range length
+    chart.colorRange().length('100%');// display the word cloud chart
+    chart.container('window');
+    chart.draw();
+  });
+  
+
     //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
    /* var win =  L.control.window(map,
         {title:'Services People Use in this Zipcode',
@@ -460,16 +530,7 @@ window.onclick = function(event) {
 document.getElementById("zipcode_select").addEventListener("change", updateZipcode2);
 
 
-//WORD CLOUD
-var fb_count = 0
-var fp_count = 0
-var cf_count = 0
-var snap_count = 0
-var wic_count = 0
-var calfresh_count = 0
-var none_count = 0 
-/*
-var data = [
+var data2 = [
     {"x": "Food Banks", "value": fb_count, category: "Food Banks"},
     {"x": "Food Pantries", "value": fp_count, category: "Food Pantries"},
     {"x": "Community Fridges", "value": cf_count, category: "Community Fridges"},
@@ -478,24 +539,16 @@ var data = [
     {"x": "CalFresh", "value": calfresh_count, category: "CalFresh"},
     {"x": "None", "value": none_count, category: "None"}
   ];
-*/
+/*
 anychart.onDocumentReady(function() {
   var data = [
-    {"x": "Mandarin chinese", "value": 1090000000, category: "Sino-Tibetan"},
-    {"x": "English", "value": 983000000, category: "Indo-European"},
-    {"x": "Hindustani", "value": 544000000, category: "Indo-European"},
-    {"x": "Spanish", "value": 527000000, category: "Indo-European"},
-    {"x": "Arabic", "value": 422000000, category: "Afro-Asiatic"},
-    {"x": "Malay", "value": 281000000, category: "Austronesian"},
-    {"x": "Russian", "value": 267000000, category: "Indo-European"},
-    {"x": "Bengali", "value": 261000000, category: "Indo-European"},
-    {"x": "Portuguese", "value": 229000000, category: "Indo-European"},
-    {"x": "French", "value": 229000000, category: "Indo-European"},
-    {"x": "Hausa", "value": 150000000, category: "Afro-Asiatic"},
-    {"x": "Punjabi", "value": 148000000, category: "Indo-European"},
-    {"x": "Japanese", "value": 129000000, category: "Japonic"},
-    {"x": "German", "value": 129000000, category: "Indo-European"},
-    {"x": "Persian", "value": 121000000, category: "Indo-European"}
+    {"x": "Food Banks", "value": fb_count, category: "Food Banks"},
+    {"x": "Food Pantries", "value": fp_count, category: "Food Pantries"},
+    {"x": "Community Fridges", "value": cf_count, category: "Community Fridges"},
+    {"x": "SNAP (Supplemental Nutrition Assistance Program)", "value": snap_count, category: "SNAP (Supplemental Nutrition Assistance Program)"},
+    {"x": "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)", "value": wic_count, category: "WIC (Special Supplemental Nutrition Program for Women, Infants, and Children)"},
+    {"x": "CalFresh", "value": calfresh_count, category: "CalFresh"},
+    {"x": "None", "value": none_count, category: "None"}
   ];// create a tag (word) cloud chart
   var chart = anychart.tagCloud(data);// set a chart title
   chart.title('15 most spoken languages')
@@ -508,7 +561,7 @@ anychart.onDocumentReady(function() {
   chart.container('window');
   chart.draw();
 });
-
+*/
 //Control Window Addition Code; To edit positions/properties of the window, work in control_window.js
 var win =  L.control.window(map,
     {title:'Services People Use in this Zipcode',
